@@ -29,4 +29,47 @@ document.addEventListener('DOMContentLoaded', () => {
         menuImage.src = recommendedMenu.imageUrl;
         menuImage.style.display = 'block'; // Make the image visible
     });
+
+    // Formspree submission handling
+    const partnershipForm = document.getElementById('partnershipForm');
+    const formStatus = document.getElementById('formStatus');
+
+    if (partnershipForm && formStatus) {
+        partnershipForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            formStatus.textContent = 'Sending...';
+            formStatus.style.color = '#3498db'; // Blue for sending
+
+            const formData = new FormData(partnershipForm);
+
+            try {
+                const response = await fetch(partnershipForm.action, {
+                    method: partnershipForm.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    formStatus.textContent = 'Inquiry sent successfully!';
+                    formStatus.style.color = '#2ecc71'; // Green for success
+                    partnershipForm.reset(); // Clear the form
+                } else {
+                    const data = await response.json();
+                    if (Object.hasOwn(data, 'errors')) {
+                        formStatus.textContent = data.errors.map(error => error.message).join(', ');
+                    } else {
+                        formStatus.textContent = 'Oops! There was a problem sending your inquiry.';
+                    }
+                    formStatus.style.color = '#e74c3c'; // Red for error
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                formStatus.textContent = 'Oops! An unexpected error occurred.';
+                formStatus.style.color = '#e74c3c'; // Red for error
+            }
+        });
+    }
 });
