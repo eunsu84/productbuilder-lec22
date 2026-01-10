@@ -1,33 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+/* Styles specific to the AI Physiognomy tool on index.html */
 
-body {
-    font-family: 'Jua', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background: linear-gradient(to right, #f857a6, #ff5858);
-    color: #fff;
-    text-align: center;
-}
-
-.container {
+.tool-container {
     background-color: rgba(0, 0, 0, 0.4);
     padding: 30px 40px;
     border-radius: 20px;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     width: 90%;
     max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+    color: #fff;
 }
 
-h1 {
+.tool-container h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-p {
+.tool-container p {
     font-size: 1.2em;
     margin-bottom: 30px;
 }
@@ -39,7 +30,7 @@ p {
     margin-bottom: 20px;
 }
 
-button {
+.controls button {
     font-family: 'Jua', sans-serif;
     background-color: #fff;
     color: #f857a6;
@@ -52,7 +43,7 @@ button {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-button:hover {
+.controls button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
@@ -76,7 +67,6 @@ button:hover {
     height: 100%;
     object-fit: cover;
 }
-
 
 #label-container {
     margin-top: 20px;
@@ -123,4 +113,3 @@ button:hover {
     font-size: 1.2em;
     padding: 20px;
 }
-

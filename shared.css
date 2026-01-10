@@ -1,0 +1,158 @@
+/* Shared styles for header, footer, and content pages */
+
+body {
+    background: #f4f4f9;
+    color: #333;
+    font-family: 'Jua', sans-serif;
+    margin: 0;
+    padding-top: 80px; /* Space for fixed header */
+}
+
+.main-header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 70px;
+}
+
+.nav-brand {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #f857a6;
+    text-decoration: none;
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 25px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover, .main-nav a.active {
+    color: #f857a6;
+}
+
+.main-footer {
+    background-color: #333;
+    color: #aaa;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 50px;
+}
+
+.main-footer p {
+    margin: 0 0 15px;
+}
+
+.main-footer nav a {
+    color: #aaa;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.main-footer nav a:hover {
+    color: #fff;
+}
+
+/* Styles for content pages (about, privacy, articles) */
+.content-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.content-page h1, .content-page h2 {
+    color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-top: 30px;
+}
+
+.content-page p, .content-page li {
+    line-height: 1.8;
+    color: #555;
+}
+
+.article-meta {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.article-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+/* Article List */
+.article-list {
+    list-style: none;
+    padding: 0;
+}
+
+.article-list li {
+    margin-bottom: 20px;
+}
+
+.article-list a {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: #333;
+    background-color: #fafafa;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.article-list a:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.article-list img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.article-list .article-info h2 {
+    font-size: 1.4em;
+    margin: 0 0 10px;
+    border: none;
+}
+
+.article-list .article-info p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+}
