@@ -3,21 +3,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuDisplay = document.getElementById('menuDisplay');
 
     const dinnerMenus = [
-        '김치찌개',
-        '된장찌개',
-        '삼겹살',
-        '치킨',
-        '피자',
-        '파스타',
-        '초밥',
-        '짜장면',
-        '닭갈비',
-        '족발',
-        '보쌈',
-        '갈비찜',
-        '스테이크',
-        '샐러드',
-        '떡볶이'
+        'Kimchi Stew',
+        'Doenjang Jjigae',
+        'Samgyeopsal (Pork Belly)',
+        'Chicken',
+        'Pizza',
+        'Pasta',
+        'Sushi',
+        'Jajangmyeon',
+        'Dakgalbi (Spicy Stir-fried Chicken)',
+        'Jokbal (Pig\'s Trotters)',
+        'Bossam (Boiled Pork Wrap)',
+        'Galbijjim (Braised Short Ribs)',
+        'Steak',
+        'Salad',
+        'Tteokbokki'
     ];
 
     recommendButton.addEventListener('click', () => {
