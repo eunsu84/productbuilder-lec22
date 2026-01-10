@@ -66,6 +66,16 @@ button:active {
     animation: fadeIn 0.5s ease-in-out;
 }
 
+#menuImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    margin-top: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
