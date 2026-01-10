@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4인용 사다리 게임</title>
+    <title>저녁 메뉴 추천</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
@@ -11,24 +11,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>사다리 게임</h1>
-        <div class="game-setup">
-            <div id="player-inputs" class="entry-inputs">
-                <input type="text" placeholder="참가자 1" value="플레이어 1">
-                <input type="text" placeholder="참가자 2" value="플레이어 2">
-                <input type="text" placeholder="참가자 3" value="플레이어 3">
-                <input type="text" placeholder="참가자 4" value="플레이어 4">
-            </div>
-            <canvas id="ladderCanvas" width="400" height="300"></canvas>
-            <div id="result-inputs" class="entry-inputs">
-                <input type="text" placeholder="결과 1" value="당첨">
-                <input type="text" placeholder="결과 2" value="꽝">
-                <input type="text" placeholder="결과 3" value="꽝">
-                <input type="text" placeholder="결과 4" value="꽝">
-            </div>
-        </div>
-        <button id="startButton">사다리 타기 시작!</button>
-        <div id="final-results"></div>
+        <h1>오늘 저녁 뭐 먹지?</h1>
+        <button id="recommendButton">메뉴 추천받기</button>
+        <h2 id="menuDisplay"></h2>
     </div>
     <script src="main.js"></script>
 </body>
