@@ -35,24 +35,41 @@ async function loadModel() {
 
 // Initialize webcam
 async function initWebcam() {
-    await loadModel();
-    
-    document.querySelector('.controls').style.display = 'none';
-
-    const flip = true;
-    webcam = new tmImage.Webcam(400, 400, flip);
-    await webcam.setup();
-    await webcam.play();
-    
+    const controls = document.querySelector('.controls');
+    const errorContainer = document.getElementById('cam-permission-error');
     const displayContainer = document.getElementById("display-container");
-    displayContainer.appendChild(webcam.canvas);
 
-    labelContainer = document.getElementById("label-container");
-    for (let i = 0; i < maxPredictions; i++) {
-        labelContainer.appendChild(document.createElement("div"));
+    // Hide error and show controls initially
+    errorContainer.style.display = 'none';
+    controls.style.display = 'flex';
+    
+    try {
+        await loadModel();
+        
+        controls.style.display = 'none';
+        displayContainer.style.display = 'flex';
+        displayContainer.innerHTML = ''; // Clear previous content
+
+        const flip = true;
+        webcam = new tmImage.Webcam(400, 400, flip);
+        await webcam.setup();
+        await webcam.play();
+        
+        displayContainer.appendChild(webcam.canvas);
+
+        labelContainer = document.getElementById("label-container");
+        labelContainer.innerHTML = '';
+        for (let i = 0; i < maxPredictions; i++) {
+            labelContainer.appendChild(document.createElement("div"));
+        }
+
+        window.requestAnimationFrame(loop);
+    } catch (error) {
+        console.error("Error setting up webcam:", error);
+        controls.style.display = 'none';
+        displayContainer.style.display = 'none';
+        errorContainer.style.display = 'block';
     }
-
-    window.requestAnimationFrame(loop);
 }
 
 async function loop() {
@@ -125,3 +142,4 @@ async function predict(inputElement) {
 document.getElementById('webcamButton').addEventListener('click', initWebcam);
 document.getElementById('uploadButton').addEventListener('click', () => document.getElementById('uploadInput').click());
 document.getElementById('uploadInput').addEventListener('change', handleUpload);
+document.getElementById('retryCamButton').addEventListener('click', initWebcam);
