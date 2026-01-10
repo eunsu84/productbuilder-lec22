@@ -24,89 +24,107 @@ const fortuneData = {
     }
 };
 
-async function loadModel() {
-    if (isModelLoaded) return;
+function loadModel() {
+    const descriptionEl = document.querySelector('p');
+    descriptionEl.innerHTML = "모델 로딩 중...";
+
+    if (isModelLoaded) {
+        return Promise.resolve();
+    }
     const modelURL = URL + "model.json";
     const metadataURL = URL + "metadata.json";
-    model = await tmImage.load(modelURL, metadataURL);
-    maxPredictions = model.getTotalClasses();
-    isModelLoaded = true;
+    
+    return tmImage.load(modelURL, metadataURL).then((loadedModel) => {
+        model = loadedModel;
+        maxPredictions = model.getTotalClasses();
+        isModelLoaded = true;
+        descriptionEl.innerHTML = "모델 로딩 성공!";
+        console.log("Model loaded successfully");
+    }).catch((error) => {
+        descriptionEl.innerHTML = `모델 로딩 실패: ${error.message}`;
+        console.error("Error loading model:", error);
+    });
 }
 
 // Initialize webcam
-async function initWebcam() {
+function initWebcam() {
     const controls = document.querySelector('.controls');
     const errorContainer = document.getElementById('cam-permission-error');
     const displayContainer = document.getElementById("display-container");
-
-    // Hide error and show controls initially
-    errorContainer.style.display = 'none';
-    controls.style.display = 'flex';
     
-    try {
-        await loadModel();
-        
+    errorContainer.style.display = 'none';
+    
+    loadModel().then(() => {
+        if (!isModelLoaded) return;
+
         controls.style.display = 'none';
         displayContainer.style.display = 'flex';
-        displayContainer.innerHTML = ''; // Clear previous content
+        displayContainer.innerHTML = '';
 
         const flip = true;
         webcam = new tmImage.Webcam(400, 400, flip);
-        await webcam.setup();
-        await webcam.play();
-        
-        displayContainer.appendChild(webcam.canvas);
-
-        labelContainer = document.getElementById("label-container");
-        labelContainer.innerHTML = '';
-        for (let i = 0; i < maxPredictions; i++) {
-            labelContainer.appendChild(document.createElement("div"));
-        }
-
-        window.requestAnimationFrame(loop);
-    } catch (error) {
-        console.error("Error setting up webcam:", error);
-        controls.style.display = 'none';
-        displayContainer.style.display = 'none';
-        errorContainer.style.display = 'block';
-    }
-}
-
-async function loop() {
-    webcam.update();
-    await predict(webcam.canvas);
-    window.requestAnimationFrame(loop);
-}
-
-// Handle file upload
-async function handleUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    await loadModel();
-
-    document.querySelector('.controls').style.display = 'none';
-    const displayContainer = document.getElementById("display-container");
-    displayContainer.style.display = 'flex'; // Ensure the container is visible
-    displayContainer.innerHTML = ''; // Clear placeholder
-
-    const image = document.createElement('img');
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-        image.src = e.target.result;
-        image.onload = async () => {
-            displayContainer.appendChild(image);
-            
+        webcam.setup().then(() => {
+            webcam.play();
+            displayContainer.appendChild(webcam.canvas);
             labelContainer = document.getElementById("label-container");
             labelContainer.innerHTML = '';
             for (let i = 0; i < maxPredictions; i++) {
                 labelContainer.appendChild(document.createElement("div"));
             }
+            window.requestAnimationFrame(loop);
+        }).catch((error) => {
+            console.error("Error setting up webcam:", error);
+            controls.style.display = 'none';
+            displayContainer.style.display = 'none';
+            errorContainer.style.display = 'block';
+        });
+    });
+}
 
-            await predict(image);
-        }
-    };
-    reader.readAsDataURL(file);
+function loop() {
+    if (webcam) {
+        webcam.update();
+        predict(webcam.canvas);
+        window.requestAnimationFrame(loop);
+    }
+}
+
+// Handle file upload
+function handleUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    loadModel().then(() => {
+        if (!isModelLoaded) return;
+
+        document.querySelector('.controls').style.display = 'none';
+        const displayContainer = document.getElementById("display-container");
+        displayContainer.style.display = 'flex';
+        displayContainer.innerHTML = '';
+
+        const image = document.createElement('img');
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            image.src = e.target.result;
+            image.onload = () => {
+                displayContainer.appendChild(image);
+                labelContainer = document.getElementById("label-container");
+                labelContainer.innerHTML = '';
+                for (let i = 0; i < maxPredictions; i++) {
+                    labelContainer.appendChild(document.createElement("div"));
+                }
+                predict(image);
+            };
+            image.onerror = () => {
+                document.querySelector('p').innerHTML = "오류: 이미지 파일을 로드할 수 없습니다.";
+            };
+        };
+        reader.onerror = () => {
+            document.querySelector('p').innerHTML = "오류: 파일을 읽을 수 없습니다.";
+        };
+        reader.readAsDataURL(file);
+    });
 }
 
 
