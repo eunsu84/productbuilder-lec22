@@ -32,26 +32,32 @@ p {
     margin-bottom: 30px;
 }
 
-#startButton {
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+button {
     font-family: 'Jua', sans-serif;
     background-color: #fff;
     color: #f857a6;
     border: none;
     padding: 15px 30px;
     border-radius: 50px;
-    font-size: 1.2em;
+    font-size: 1.1em;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-bottom: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-#startButton:hover {
+button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-#webcam-container {
+#display-container {
     width: 400px;
     height: 400px;
     margin: 20px auto;
@@ -60,7 +66,17 @@ p {
     background-color: #333;
     border: 5px solid #fff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+#display-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 
 #label-container {
     margin-top: 20px;
