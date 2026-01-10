@@ -86,14 +86,15 @@ async function handleUpload(event) {
     await loadModel();
 
     document.querySelector('.controls').style.display = 'none';
+    const displayContainer = document.getElementById("display-container");
+    displayContainer.style.display = 'flex'; // Ensure the container is visible
+    displayContainer.innerHTML = ''; // Clear placeholder
 
     const image = document.createElement('img');
     const reader = new FileReader();
     reader.onload = async (e) => {
         image.src = e.target.result;
         image.onload = async () => {
-            const displayContainer = document.getElementById("display-container");
-            displayContainer.innerHTML = '';
             displayContainer.appendChild(image);
             
             labelContainer = document.getElementById("label-container");
