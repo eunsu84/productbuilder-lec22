@@ -138,8 +138,19 @@ async function predict(inputElement) {
     }
 }
 
+function showInitialScreen() {
+    document.querySelector('.controls').style.display = 'flex';
+    document.getElementById('cam-permission-error').style.display = 'none';
+    const displayContainer = document.getElementById("display-container");
+    displayContainer.style.display = 'flex';
+    displayContainer.innerHTML = '<p class="placeholder-text">여기에 웹캠 화면 또는 사진이 나타납니다.</p>';
+    document.getElementById('label-container').innerHTML = '';
+    document.querySelector('p').innerHTML = '당신의 얼굴은 어떤 동물상에 가까울까요?';
+}
+
 // Event Listeners
 document.getElementById('webcamButton').addEventListener('click', initWebcam);
 document.getElementById('uploadButton').addEventListener('click', () => document.getElementById('uploadInput').click());
 document.getElementById('uploadInput').addEventListener('change', handleUpload);
 document.getElementById('retryCamButton').addEventListener('click', initWebcam);
+document.getElementById('backButton').addEventListener('click', showInitialScreen);

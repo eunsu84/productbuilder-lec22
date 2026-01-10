@@ -109,6 +109,13 @@ button:hover {
     background-color: #ffc107;
     color: #333;
     font-size: 1em;
+    margin-right: 10px;
+}
+
+#backButton {
+    background-color: #6c757d;
+    color: #fff;
+    font-size: 1em;
 }
 
 .placeholder-text {
@@ -116,3 +123,4 @@ button:hover {
     font-size: 1.2em;
     padding: 20px;
 }
+
