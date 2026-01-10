@@ -82,26 +82,19 @@ async function loop() {
 async function handleUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
-
-    const descriptionEl = document.querySelector('p');
     
-    descriptionEl.innerHTML = "모델 로딩 중...";
     await loadModel();
 
     document.querySelector('.controls').style.display = 'none';
     const displayContainer = document.getElementById("display-container");
-    displayContainer.style.display = 'flex';
-    displayContainer.innerHTML = '';
+    displayContainer.style.display = 'flex'; // Ensure the container is visible
+    displayContainer.innerHTML = ''; // Clear placeholder
 
     const image = document.createElement('img');
     const reader = new FileReader();
-
-    descriptionEl.innerHTML = "파일 읽는 중...";
     reader.onload = async (e) => {
-        descriptionEl.innerHTML = "이미지 로드 중...";
         image.src = e.target.result;
         image.onload = async () => {
-            descriptionEl.innerHTML = "관상 분석 중...";
             displayContainer.appendChild(image);
             
             labelContainer = document.getElementById("label-container");
@@ -112,13 +105,7 @@ async function handleUpload(event) {
 
             await predict(image);
         }
-        image.onerror = () => {
-            descriptionEl.innerHTML = "오류: 이미지 파일을 로드할 수 없습니다.";
-        }
     };
-    reader.onerror = () => {
-        descriptionEl.innerHTML = "오류: 파일을 읽을 수 없습니다.";
-    }
     reader.readAsDataURL(file);
 }
 
