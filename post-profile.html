@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>프로필 등록 - 파도승선</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">⚓</span>
+        <span>파도승선</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">홈</a>
+        <a href="jobs.html">구인</a>
+        <a href="seekers.html">구직</a>
+        <a href="post-job.html">채용등록</a>
+        <a class="active" href="post-profile.html">프로필등록</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn ghost" href="contact.html">상담 요청</a>
+        <a class="btn primary" href="seekers.html">프로필 보기</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h1 class="section-title">구직 프로필 등록</h1>
+        <p class="section-subtitle">운항사에서 바로 확인할 수 있도록 경력과 희망 항로를 상세히 입력해 주세요.</p>
+        <form class="form card" style="margin-top: 2rem;">
+          <div class="two-col">
+            <div>
+              <label for="name">이름</label>
+              <input id="name" type="text" placeholder="예: 김도현" />
+            </div>
+            <div>
+              <label for="role">희망 직무</label>
+              <input id="role" type="text" placeholder="항해사, 기관사 등" />
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <label for="location">거주 지역</label>
+              <input id="location" type="text" placeholder="예: 부산" />
+            </div>
+            <div>
+              <label for="license">보유 면허</label>
+              <input id="license" type="text" placeholder="해기사 2급" />
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <label for="experience">경력</label>
+              <input id="experience" type="text" placeholder="예: 7년" />
+            </div>
+            <div>
+              <label for="availability">투입 가능 시기</label>
+              <select id="availability">
+                <option>즉시</option>
+                <option>2주 후</option>
+                <option>협의</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="intro">자기 소개</label>
+            <textarea id="intro" placeholder="경력 요약, 선호 항로, 근무 조건 등을 입력"></textarea>
+          </div>
+          <button class="btn primary" type="submit">프로필 등록 요청</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>파도승선</strong>
+        <p>여객선 선원과 운항사를 연결하는 전문 채용 플랫폼.</p>
+      </div>
+      <div>
+        <strong>바로가기</strong>
+        <div class="list">
+          <a href="jobs.html">구인 공고</a>
+          <a href="seekers.html">구직 프로필</a>
+          <a href="contact.html">상담 신청</a>
+        </div>
+      </div>
+      <div>
+        <strong>고객센터</strong>
+        <div class="list">
+          <span>평일 09:00 - 18:00</span>
+          <a href="mailto:hello@pado-crew.kr">hello@pado-crew.kr</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

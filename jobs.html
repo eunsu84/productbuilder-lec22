@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>소개 - 파도승선</title>
+  <title>구인 공고 - 파도승선</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shared.css" />
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
@@ -19,14 +18,14 @@
       </a>
       <nav class="nav-links">
         <a href="index.html">홈</a>
-        <a href="jobs.html">구인</a>
+        <a class="active" href="jobs.html">구인</a>
         <a href="seekers.html">구직</a>
         <a href="post-job.html">채용등록</a>
         <a href="post-profile.html">프로필등록</a>
       </nav>
       <div class="nav-actions">
         <a class="btn ghost" href="contact.html">상담 요청</a>
-        <a class="btn primary" href="jobs.html">공고 보기</a>
+        <a class="btn primary" href="post-job.html">공고 등록</a>
       </div>
     </div>
   </header>
@@ -34,23 +33,27 @@
   <main>
     <section class="section">
       <div class="container">
-        <h1 class="section-title">파도승선 소개</h1>
-        <p class="section-subtitle">섬과 섬을 잇는 여객선 산업을 위해 선원과 운항사를 빠르게 연결합니다.</p>
-        <div class="grid grid-2" style="margin-top: 2rem;">
-          <article class="card">
-            <h2>우리의 미션</h2>
-            <p>모든 항로에서 안전하고 신뢰받는 운항이 지속될 수 있도록 전문 인력 매칭을 지원합니다.</p>
-            <p>단기 대체 인력부터 장기 고용까지 한 플랫폼에서 관리합니다.</p>
-          </article>
-          <article class="card">
-            <h2>운영 방식</h2>
-            <div class="timeline">
-              <div class="timeline-item">운항사 조건 분석 및 채용 전략 제안</div>
-              <div class="timeline-item">선원 경력·자격 검증</div>
-              <div class="timeline-item">채용 확정 후 근무 정착 지원</div>
+        <h1 class="section-title">여객선 구인 공고</h1>
+        <p class="section-subtitle">항로와 직무에 맞춘 채용 공고를 빠르게 확인하세요.</p>
+        <div class="card" style="margin-top: 2rem;">
+          <form class="form">
+            <div class="two-col">
+              <div>
+                <label for="job-search">검색</label>
+                <input id="job-search" type="search" placeholder="항해사, 항로, 회사명을 입력" />
+              </div>
+              <div>
+                <label for="job-type">근무 형태</label>
+                <select id="job-type">
+                  <option value="all">전체</option>
+                  <option value="정규직">정규직</option>
+                  <option value="계약직">계약직</option>
+                </select>
+              </div>
             </div>
-          </article>
+          </form>
         </div>
+        <div id="job-list" class="list" style="margin-top: 2rem;"></div>
       </div>
     </section>
   </main>
@@ -78,5 +81,7 @@
       </div>
     </div>
   </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>

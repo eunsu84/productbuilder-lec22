@@ -1,175 +1,150 @@
-// Teachable Machine model URL from the user
-const URL = "https://teachablemachine.withgoogle.com/models/wrgclmFFL/";
+const jobs = [
+  {
+    title: "항해사 (2등급)",
+    company: "해오름여객선",
+    location: "목포 - 흑산",
+    schedule: "격일 근무",
+    license: "해기사 2급",
+    type: "정규직",
+    pay: "월 420만원",
+  },
+  {
+    title: "기관사",
+    company: "푸른해협", 
+    location: "통영 - 욕지도",
+    schedule: "주 5일",
+    license: "해기사 3급",
+    type: "계약직",
+    pay: "월 360만원",
+  },
+  {
+    title: "객실 승무원",
+    company: "섬마을라인",
+    location: "인천 - 백령",
+    schedule: "주 6일",
+    license: "서비스 자격",
+    type: "정규직",
+    pay: "월 280만원",
+  },
+  {
+    title: "갑판원",
+    company: "남해스타",
+    location: "여수 - 거문",
+    schedule: "2교대",
+    license: "해기사 4급",
+    type: "정규직",
+    pay: "월 310만원",
+  },
+];
 
-let model, webcam, labelContainer, maxPredictions;
-let isModelLoaded = false;
+const crew = [
+  {
+    name: "김도현",
+    role: "항해사",
+    location: "부산",
+    experience: "7년",
+    license: "해기사 2급",
+    availability: "즉시",
+  },
+  {
+    name: "박지은",
+    role: "객실 승무원",
+    location: "인천",
+    experience: "4년",
+    license: "서비스 자격",
+    availability: "2주 후",
+  },
+  {
+    name: "최윤호",
+    role: "기관사",
+    location: "여수",
+    experience: "5년",
+    license: "해기사 3급",
+    availability: "협의",
+  },
+  {
+    name: "이수진",
+    role: "갑판원",
+    location: "목포",
+    experience: "3년",
+    license: "해기사 4급",
+    availability: "즉시",
+  },
+];
 
-// Fortune/reading data for each class
-const fortuneData = {
-    "강아지상": {
-        title: "천진난만 강아지상",
-        description: "사람을 좋아하고 다정다감한 당신! 주변에 항상 사람들이 넘쳐나는 인싸중에 인싸군요. 가끔은 거절을 잘 못해서 손해를 보기도 하지만, 특유의 긍정적인 성격으로 잘 이겨낼 거예요."
+const filters = {
+  jobs: {
+    listId: "job-list",
+    searchId: "job-search",
+    selectId: "job-type",
+    data: jobs,
+    render(item) {
+      return `
+        <article class="list-item">
+          <header>
+            <div>
+              <h3>${item.title}</h3>
+              <div class="meta">${item.company} · ${item.location}</div>
+            </div>
+            <span class="badge">${item.type}</span>
+          </header>
+          <div class="meta">${item.schedule} · ${item.license} · ${item.pay}</div>
+          <a class="btn ghost" href="post-profile.html">지원 문의</a>
+        </article>
+      `;
     },
-    "고양이상": {
-        title: "매력만점 고양이상",
-        description: "도도하고 시크해 보이지만, 알고 보면 따뜻한 마음을 가진 츤데레군요! 신비로운 분위기를 풍겨 이성에게 인기가 많고, 한번 마음을 연 상대에게는 깊은 신뢰를 보여주는 의리파입니다."
+  },
+  crew: {
+    listId: "crew-list",
+    searchId: "crew-search",
+    selectId: "crew-role",
+    data: crew,
+    render(item) {
+      return `
+        <article class="list-item">
+          <header>
+            <div>
+              <h3>${item.name}</h3>
+              <div class="meta">${item.role} · ${item.location}</div>
+            </div>
+            <span class="badge">${item.availability}</span>
+          </header>
+          <div class="meta">경력 ${item.experience} · ${item.license}</div>
+          <a class="btn ghost" href="contact.html">연락하기</a>
+        </article>
+      `;
     },
-    "토끼상": {
-        title: "귀염뽀짝 토끼상",
-        description: "상상력이 풍부하고 감수성이 예민한 당신은 예술적인 재능이 뛰어나군요. 겁이 많고 눈물이 많아 여리게 보이지만, 사실은 외유내강형으로 중요한 순간에 강한 모습을 보여줍니다."
-    },
-    "공룡상": {
-        title: "카리스마 공룡상",
-        description: "강한 리더십과 카리스마로 그룹을 이끄는 것을 즐기는 당신! 시원시원한 성격과 남다른 유머감각으로 인기가 많습니다. 목표를 향해 달려가는 추진력 또한 뛰어납니다."
-    }
+  },
 };
 
-function loadModel() {
-    const descriptionEl = document.querySelector('p');
-    descriptionEl.innerHTML = "모델 로딩 중...";
+function setupFilter({ listId, searchId, selectId, data, render }) {
+  const listEl = document.getElementById(listId);
+  if (!listEl) return;
 
-    if (isModelLoaded) {
-        return Promise.resolve();
-    }
-    const modelURL = URL + "model.json";
-    const metadataURL = URL + "metadata.json";
-    
-    return tmImage.load(modelURL, metadataURL).then((loadedModel) => {
-        model = loadedModel;
-        maxPredictions = model.getTotalClasses();
-        isModelLoaded = true;
-        descriptionEl.innerHTML = "모델 로딩 성공!";
-        console.log("Model loaded successfully");
-    }).catch((error) => {
-        descriptionEl.innerHTML = `모델 로딩 실패: ${error.message}`;
-        console.error("Error loading model:", error);
+  const searchEl = document.getElementById(searchId);
+  const selectEl = document.getElementById(selectId);
+
+  function apply() {
+    const query = searchEl?.value.trim().toLowerCase() ?? "";
+    const selected = selectEl?.value ?? "all";
+
+    const filtered = data.filter((item) => {
+      const haystack = Object.values(item).join(" ").toLowerCase();
+      const matchesQuery = haystack.includes(query);
+      const matchesType = selected === "all" || haystack.includes(selected.toLowerCase());
+      return matchesQuery && matchesType;
     });
+
+    listEl.innerHTML = filtered.map(render).join("");
+  }
+
+  searchEl?.addEventListener("input", apply);
+  selectEl?.addEventListener("change", apply);
+
+  apply();
 }
 
-// Initialize webcam
-function initWebcam() {
-    const controls = document.querySelector('.controls');
-    const errorContainer = document.getElementById('cam-permission-error');
-    const displayContainer = document.getElementById("display-container");
-    
-    errorContainer.style.display = 'none';
-    
-    loadModel().then(() => {
-        if (!isModelLoaded) return;
-
-        controls.style.display = 'none';
-        displayContainer.style.display = 'flex';
-        displayContainer.innerHTML = '';
-
-        const flip = true;
-        webcam = new tmImage.Webcam(400, 400, flip);
-        webcam.setup().then(() => {
-            webcam.play();
-            displayContainer.appendChild(webcam.canvas);
-            labelContainer = document.getElementById("label-container");
-            labelContainer.innerHTML = '';
-            for (let i = 0; i < maxPredictions; i++) {
-                labelContainer.appendChild(document.createElement("div"));
-            }
-            window.requestAnimationFrame(loop);
-        }).catch((error) => {
-            console.error("Error setting up webcam:", error);
-            controls.style.display = 'none';
-            displayContainer.style.display = 'none';
-            errorContainer.style.display = 'block';
-        });
-    });
-}
-
-function loop() {
-    if (webcam) {
-        webcam.update();
-        predict(webcam.canvas);
-        window.requestAnimationFrame(loop);
-    }
-}
-
-// Handle file upload
-function handleUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    loadModel().then(() => {
-        if (!isModelLoaded) return;
-
-        document.querySelector('.controls').style.display = 'none';
-        const displayContainer = document.getElementById("display-container");
-        displayContainer.style.display = 'flex';
-        displayContainer.innerHTML = '';
-
-        const image = document.createElement('img');
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            image.src = e.target.result;
-            image.onload = () => {
-                displayContainer.appendChild(image);
-                labelContainer = document.getElementById("label-container");
-                labelContainer.innerHTML = '';
-                for (let i = 0; i < maxPredictions; i++) {
-                    labelContainer.appendChild(document.createElement("div"));
-                }
-                predict(image);
-            };
-            image.onerror = () => {
-                document.querySelector('p').innerHTML = "오류: 이미지 파일을 로드할 수 없습니다.";
-            };
-        };
-        reader.onerror = () => {
-            document.querySelector('p').innerHTML = "오류: 파일을 읽을 수 없습니다.";
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-
-// Predict function for both webcam and image
-async function predict(inputElement) {
-    const prediction = await model.predict(inputElement);
-    let highestProb = 0;
-    let bestClass = "";
-
-    for (let i = 0; i < maxPredictions; i++) {
-        const classPrediction = prediction[i].className;
-        const probability = prediction[i].probability;
-
-        if (probability > highestProb) {
-            highestProb = probability;
-            bestClass = classPrediction;
-        }
-        
-        let fortuneInfo = fortuneData[classPrediction] || { title: classPrediction, description: "아직 데이터가 없는 관상이네요! 새로운 관상을 찾아보세요." };
-        const predictionText = `${fortuneInfo.title}: ${Math.round(probability * 100)}%`;
-        if (labelContainer.childNodes[i]) {
-            labelContainer.childNodes[i].innerHTML = predictionText;
-        }
-    }
-    
-    const bestFortune = fortuneData[bestClass] || { description: "결과를 기다리고 있습니다..." };
-    const descriptionEl = document.querySelector('p');
-    if (descriptionEl) {
-        descriptionEl.innerHTML = `<strong>가장 닮은 관상은?</strong><br>${bestFortune.description}`;
-    }
-}
-
-function showInitialScreen() {
-    document.querySelector('.controls').style.display = 'flex';
-    document.getElementById('cam-permission-error').style.display = 'none';
-    const displayContainer = document.getElementById("display-container");
-    displayContainer.style.display = 'flex';
-    displayContainer.innerHTML = '<p class="placeholder-text">여기에 웹캠 화면 또는 사진이 나타납니다.</p>';
-    document.getElementById('label-container').innerHTML = '';
-    document.querySelector('p').innerHTML = '당신의 얼굴은 어떤 동물상에 가까울까요?';
-}
-
-// Event Listeners
-document.getElementById('webcamButton').addEventListener('click', initWebcam);
-document.getElementById('uploadButton').addEventListener('click', () => document.getElementById('uploadInput').click());
-document.getElementById('uploadInput').addEventListener('change', handleUpload);
-document.getElementById('retryCamButton').addEventListener('click', initWebcam);
-document.getElementById('backButton').addEventListener('click', showInitialScreen);
+window.addEventListener("DOMContentLoaded", () => {
+  setupFilter(filters.jobs);
+  setupFilter(filters.crew);
+});
