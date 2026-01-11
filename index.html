@@ -6,72 +6,55 @@
   <title>파도승선 - 여객선 선원 구인구직</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shared.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">⚓</span>
-        <span>파도승선</span>
-      </a>
-      <nav class="nav-links">
-        <a class="active" href="index.html">홈</a>
-        <a href="jobs.html">구인</a>
-        <a href="seekers.html">구직</a>
-        <a href="post-job.html">채용등록</a>
-        <a href="post-profile.html">프로필등록</a>
-      </nav>
-      <div class="nav-actions">
-        <a class="btn ghost" href="contact.html">상담 요청</a>
-        <a class="btn primary" href="jobs.html">바로 검색</a>
+      <a class="brand" href="index.html">PADO CREW</a>
+      <div class="nav-links">
+        <ul>
+          <li><a class="active" href="index.html">홈</a></li>
+          <li><a href="jobs.html">구인광고</a></li>
+          <li><a href="seekers.html">구직자</a></li>
+          <li><a href="post-job.html">구인등록</a></li>
+          <li><a href="post-profile.html">프로필등록</a></li>
+          <li><a href="about.html">소개</a></li>
+        </ul>
+      </div>
+      <div class="top-actions">
+        <a href="contact.html">상담요청</a>
+        <a class="btn ghost" href="contact.html">문의하기</a>
       </div>
     </div>
   </header>
 
   <main>
     <section class="hero">
-      <div class="container hero-inner">
-        <div class="hero-copy reveal">
-          <div class="hero-pill">FERRY CREW MATCHING</div>
-          <h1>섬을 잇는 여객선, 사람을 잇는 선원 매칭</h1>
-          <p>항로별 맞춤 조건과 신뢰 가능한 선원 데이터로 여객선 채용을 간편하게 연결합니다.</p>
-          <div class="nav-actions" style="margin-top: 1.5rem;">
-            <a class="btn primary" href="post-job.html">채용 공고 등록</a>
-            <a class="btn ghost" href="seekers.html">선원 찾기</a>
+      <div class="container hero-grid">
+        <div class="hero-card">
+          <div class="notice">여객선 전용 구인구직 플랫폼</div>
+          <h1 class="hero-title">항로에 맞는 선원을 가장 빠르게.</h1>
+          <p class="hero-desc">파도승선은 여객선 운영사와 전문 선원을 연결해 즉시 투입 가능한 인력을 제안합니다.</p>
+          <div class="hero-actions">
+            <a class="btn" href="post-job.html">구인 등록</a>
+            <a class="btn ghost" href="seekers.html">구직자 보기</a>
           </div>
         </div>
-        <div class="hero-card reveal reveal-delay-1">
-          <h2>오늘의 항로 브리핑</h2>
-          <div class="timeline">
-            <div class="timeline-item">
-              <strong>서해 항로</strong>
-              <div class="meta">즉시 투입 가능한 항해사 14명</div>
-            </div>
-            <div class="timeline-item">
-              <strong>남해 항로</strong>
-              <div class="meta">기관사 계약직 6건 진행 중</div>
-            </div>
-            <div class="timeline-item">
-              <strong>동해 항로</strong>
-              <div class="meta">객실 승무원 추천 매칭률 92%</div>
-            </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>320+</strong>
+            <div class="muted">활성 선원</div>
           </div>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <strong>320+</strong>
-              <div class="meta">활성 선원</div>
-            </div>
-            <div class="hero-stat">
-              <strong>78</strong>
-              <div class="meta">운항사 파트너</div>
-            </div>
-            <div class="hero-stat">
-              <strong>24h</strong>
-              <div class="meta">평균 매칭 시간</div>
-            </div>
+          <div class="stat">
+            <strong>78</strong>
+            <div class="muted">운항사 파트너</div>
+          </div>
+          <div class="stat">
+            <strong>24h</strong>
+            <div class="muted">평균 매칭 시간</div>
           </div>
         </div>
       </div>
@@ -79,75 +62,52 @@
 
     <section class="section">
       <div class="container">
-        <h2 class="section-title reveal">채용 담당자를 위한 핵심 기능</h2>
-        <p class="section-subtitle reveal">노선 특성에 맞춘 선원 정보와 검증 절차를 한 곳에서 관리하세요.</p>
-        <div class="grid grid-3" style="margin-top: 2rem;">
-          <article class="card reveal reveal-delay-1">
-            <span class="badge">맞춤 필터</span>
-            <h3>항로별 조건 추천</h3>
-            <p>항해 거리, 근무 교대, 면허 등급을 입력하면 최적의 후보를 자동으로 분류합니다.</p>
-          </article>
-          <article class="card reveal reveal-delay-2">
-            <span class="badge">검증 데이터</span>
-            <h3>경력·자격 검토</h3>
-            <p>선원 등록 시 경력 및 안전교육 이력을 확인하여 채용 리스크를 줄입니다.</p>
-          </article>
-          <article class="card reveal reveal-delay-3">
-            <span class="badge">실시간 알림</span>
-            <h3>긴급 투입 대응</h3>
-            <p>급한 공고는 앱 알림으로 즉시 배포되어 빠른 응답을 받을 수 있습니다.</p>
-          </article>
+        <h2 class="section-title">긴급 구인 브리핑</h2>
+        <div class="urgent-bar">
+          <div class="urgent-label">긴급구인</div>
+          <div class="ticker">
+            <div class="ticker-track" id="urgent-track"></div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="container split">
+      <div class="container">
+        <h2 class="section-title">최근 구인 공고</h2>
+        <p class="page-subtitle">업데이트 순으로 최신 공고를 확인하세요.</p>
+        <table class="board-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>구인내용</th>
+              <th>회사명</th>
+              <th>모집직종</th>
+              <th>근무지</th>
+              <th>Update<br />모집마감</th>
+              <th>조회</th>
+            </tr>
+          </thead>
+          <tbody id="job-list" data-limit="4" data-empty-colspan="7"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container grid grid-2">
         <div class="card">
-          <h2 class="section-title">추천 구인 공고</h2>
-          <div class="list">
-            <div class="list-item">
-              <header>
-                <div>
-                  <h3>항해사 (2등급)</h3>
-                  <div class="meta">해오름여객선 · 목포 - 흑산</div>
-                </div>
-                <span class="badge">정규직</span>
-              </header>
-              <div class="meta">격일 근무 · 해기사 2급 · 월 420만원</div>
-            </div>
-            <div class="list-item">
-              <header>
-                <div>
-                  <h3>객실 승무원</h3>
-                  <div class="meta">섬마을라인 · 인천 - 백령</div>
-                </div>
-                <span class="badge">정규직</span>
-              </header>
-              <div class="meta">주 6일 · 서비스 자격 · 월 280만원</div>
-            </div>
+          <h3>채용 담당자를 위한 요약</h3>
+          <p>선원 면허, 승선 경력, 항로 적합성 데이터를 기반으로 빠르게 후보군을 정리합니다.</p>
+          <div class="hero-actions">
+            <a class="btn ghost" href="jobs.html">구인광고 보기</a>
           </div>
         </div>
-        <div class="banner">
-          <h3>선원 커리어를 위한 상담 데스크</h3>
-          <p>면허 갱신, 안전교육, 근무지 상담까지 무료로 연결해 드립니다.</p>
-          <a class="btn" href="contact.html">상담 신청하기</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">운항사와 선원이 남긴 후기</h2>
-        <div class="grid grid-2" style="margin-top: 2rem;">
-          <article class="card">
-            <p>“필요한 면허 등급과 경력이 정확히 필터링되어 당일에 기관사를 채용했습니다.”</p>
-            <strong>푸른해협 인사팀</strong>
-          </article>
-          <article class="card">
-            <p>“근무 조건을 정리해주셔서 새 항로로 이동하는 과정이 훨씬 수월했어요.”</p>
-            <strong>항해사 김도현</strong>
-          </article>
+        <div class="card">
+          <h3>선원을 위한 커리어 지원</h3>
+          <p>면허 갱신과 안전교육 정보를 함께 제공해 이직 준비를 체계적으로 돕습니다.</p>
+          <div class="hero-actions">
+            <a class="btn" href="post-profile.html">프로필 등록</a>
+          </div>
         </div>
       </div>
     </section>
@@ -161,15 +121,15 @@
       </div>
       <div>
         <strong>바로가기</strong>
-        <div class="list">
-          <a href="jobs.html">구인 공고</a>
-          <a href="seekers.html">구직 프로필</a>
-          <a href="post-job.html">채용 등록</a>
+        <div class="grid">
+          <a href="jobs.html">구인광고</a>
+          <a href="seekers.html">구직자</a>
+          <a href="post-job.html">구인등록</a>
         </div>
       </div>
       <div>
         <strong>고객센터</strong>
-        <div class="list">
+        <div class="grid">
           <span>평일 09:00 - 18:00</span>
           <a href="mailto:hello@pado-crew.kr">hello@pado-crew.kr</a>
         </div>
