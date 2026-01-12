@@ -196,13 +196,59 @@ function setupFilter({ listId, searchId, selectId, data, render, emptyMessage })
   apply();
 }
 
+function setupPostJobForm() {
+  const form = document.querySelector("form.card");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const company = document.getElementById("company").value;
+    const route = document.getElementById("route").value;
+    const role = document.getElementById("role").value;
+    const license = document.getElementById("license").value;
+    const type = document.getElementById("type").value;
+    const pay = document.getElementById("pay").value;
+    const details = document.getElementById("details").value;
+
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+
+    const newJob = {
+      id: Date.now(),
+      title: `${role} 모집`,
+      company,
+      role,
+      location: route,
+      updated: `${yyyy}-${mm}-${dd}`,
+      deadline: "수시모집",
+      views: Math.floor(Math.random() * 1000),
+      tag: type,
+      license,
+      pay,
+      details,
+    };
+
+    const existingJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+    localStorage.setItem("jobs", JSON.stringify([...existingJobs, newJob]));
+
+    window.location.href = "jobs.html";
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   setupTicker();
+
+  const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const allJobs = [...jobs, ...storedJobs].sort((a, b) => b.id - a.id);
+
   setupFilter({
     listId: "job-list",
     searchId: "job-search",
     selectId: "job-role",
-    data: jobs,
+    data: allJobs,
     render: renderJobRow,
     emptyMessage: "검색 결과가 없습니다.",
   });
@@ -214,4 +260,5 @@ window.addEventListener("DOMContentLoaded", () => {
     render: renderCrewRow,
     emptyMessage: "등록된 프로필이 없습니다.",
   });
+  setupPostJobForm();
 });
