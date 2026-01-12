@@ -126,7 +126,7 @@ function renderJobRow(item) {
     <tr>
       <td>${item.id}</td>
       <td>
-        <div class="title">${item.title}</div>
+        <a class="title" href="job-detail.html?id=${item.id}">${item.title}</a>
         <div class="muted">${item.tag}</div>
       </td>
       <td>${item.company}</td>
@@ -149,6 +149,26 @@ function renderCrewRow(item) {
       <td>${item.availability}</td>
       <td>${item.route}</td>
     </tr>
+  `;
+}
+
+function renderJobDetail(item) {
+  return `
+    <h1 class="page-title">${item.title}</h1>
+    <div class="card" style="margin-top: 1.6rem;">
+      <div class="form-grid">
+        <div><label>회사명</label><div>${item.company}</div></div>
+        <div><label>항로</label><div>${item.location}</div></div>
+        <div><label>모집 직무</label><div>${item.role}</div></div>
+        <div><label>필요 면허</label><div>${item.license}</div></div>
+        <div><label>근무 형태</label><div>${item.tag}</div></div>
+        <div><label>급여</label><div>${item.pay}</div></div>
+      </div>
+      <div style="margin-top: 1rem;">
+        <label>상세 내용</label>
+        <div style="white-space: pre-wrap;">${item.details}</div>
+      </div>
+    </div>
   `;
 }
 
@@ -238,6 +258,30 @@ function setupPostJobForm() {
   });
 }
 
+function setupJobDetailPage() {
+  const container = document.getElementById("job-detail-container");
+  if (!container) return;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const jobId = Number(urlParams.get("id"));
+
+  if (!jobId) {
+    container.innerHTML = "<p>구인 정보를 찾을 수 없습니다.</p>";
+    return;
+  }
+
+  const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+  const allJobs = [...jobs, ...storedJobs];
+  const job = allJobs.find(j => j.id === jobId);
+
+  if (job) {
+    container.innerHTML = renderJobDetail(job);
+  }
+  else {
+    container.innerHTML = "<p>구인 정보를 찾을 수 없습니다.</p>";
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   setupTicker();
 
@@ -261,4 +305,5 @@ window.addEventListener("DOMContentLoaded", () => {
     emptyMessage: "등록된 프로필이 없습니다.",
   });
   setupPostJobForm();
+  setupJobDetailPage();
 });
