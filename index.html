@@ -3,58 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>여객선 승선 - 여객선 선원 구인구직</title>
+  <title>스테이아미 STAY AMI | 프라이빗 풀빌라</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shared.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="index.html">PASSENGERSHIP CREW</a>
-      <div class="nav-links">
-        <ul>
-          <li><a class="active" href="index.html">홈</a></li>
-          <li><a href="jobs.html">구인광고</a></li>
-          <li><a href="seekers.html">구직자</a></li>
-          <li><a href="post-job.html">구인등록</a></li>
-          <li><a href="post-profile.html">프로필등록</a></li>
-          <li><a href="about.html">소개</a></li>
-        </ul>
-      </div>
+      <a class="brand" href="#home">스테이아미 STAY AMI</a>
+      <nav class="nav-links">
+        <a href="#about">숙소 소개</a>
+        <a href="#rooms">공간 구성</a>
+        <a href="#amenities">편의시설</a>
+        <a href="#guide">주변 안내</a>
+        <a href="#reviews">후기</a>
+        <a href="#contact">문의</a>
+      </nav>
       <div class="top-actions">
-        <a href="contact.html">상담요청</a>
-        <a class="btn ghost" href="contact.html">문의하기</a>
+        <a href="#contact">메시지 보내기</a>
+        <a class="btn ghost" href="#booking">예약 문의</a>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="home">
       <div class="container hero-grid">
-        <div class="hero-card">
-          <div class="notice">여객선 전용 구인구직 플랫폼</div>
-          <h1 class="hero-title">항로에 맞는 선원을 가장 빠르게.</h1>
-          <p class="hero-desc">여객선 승선은 여객선 운영사와 전문 선원을 연결해 즉시 투입 가능한 인력을 제안합니다.</p>
+        <div class="hero-copy reveal">
+          <p class="eyebrow">바다와 숲 사이, 하루 한 팀만 머무는 프라이빗 스테이</p>
+          <h1>파도 소리와 햇살이 귓가에 머무는 휴식, 스테이아미 STAY AMI.</h1>
+          <p class="hero-desc">탁 트인 오션뷰, 온수 풀, 대형 테라스, 그리고 깊은 밤을 위한 무드 조명까지. 혼자 혹은 사랑하는 사람들과 완전히 프라이빗한 하루를 경험하세요.</p>
           <div class="hero-actions">
-            <a class="btn" href="post-job.html">구인 등록</a>
-            <a class="btn ghost" href="seekers.html">구직자 보기</a>
+            <a class="btn" href="#booking">예약 가능 날짜 보기</a>
+            <a class="btn ghost" href="#contact">호스트에게 문의</a>
+          </div>
+          <div class="hero-highlights stagger">
+            <div>
+              <strong>최대 6인</strong>
+              <span>침실 2 · 욕실 2</span>
+            </div>
+            <div>
+              <strong>온수 풀</strong>
+              <span>사계절 운영</span>
+            </div>
+            <div>
+              <strong>전용 테라스</strong>
+              <span>선셋 & 바비큐</span>
+            </div>
           </div>
         </div>
-        <div class="stats">
-          <div class="stat">
-            <strong>320+</strong>
-            <div class="muted">활성 선원</div>
+        <div class="hero-panel reveal">
+          <div class="hero-media">
+            <div class="hero-card-photo"></div>
+            <div class="hero-card-note">
+              <span>오늘의 무드</span>
+              <strong>Sunset Orange</strong>
+              <p>체크인 15:00 · 체크아웃 11:00</p>
+            </div>
           </div>
-          <div class="stat">
-            <strong>78</strong>
-            <div class="muted">운항사 파트너</div>
+          <div class="booking-card" id="booking">
+            <div class="booking-header">
+              <strong>예약 문의</strong>
+              <span>요금은 시즌에 따라 달라집니다.</span>
+            </div>
+            <div class="form-grid">
+              <label>
+                체크인
+                <input type="date" name="checkin" />
+              </label>
+              <label>
+                체크아웃
+                <input type="date" name="checkout" />
+              </label>
+              <label>
+                인원
+                <select name="guests">
+                  <option>1-2인</option>
+                  <option>3-4인</option>
+                  <option>5-6인</option>
+                </select>
+              </label>
+              <button class="btn" type="button">상담 요청 보내기</button>
+            </div>
+            <p class="booking-note">24시간 내 답변 · 카카오/문자 상담 가능</p>
           </div>
-          <div class="stat">
-            <strong>24h</strong>
-            <div class="muted">평균 매칭 시간</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container split reveal">
+        <div>
+          <h2 class="section-title">숙소 소개</h2>
+          <p class="section-desc">스테이아미 STAY AMI는 도시의 속도를 잠시 내려놓고, 바다와 닿는 하늘을 그대로 누릴 수 있는 곳입니다. 아늑한 침실, 조용한 거실, 온수 풀, 그리고 석양을 맞이하는 테라스가 하나의 장면처럼 연결됩니다.</p>
+          <div class="tag-list">
+            <span>프라이빗 스테이</span>
+            <span>오션뷰</span>
+            <span>온수 풀</span>
+            <span>바비큐 존</span>
+            <span>주차 2대</span>
+          </div>
+        </div>
+        <div class="story-card">
+          <h3>호스트 메시지</h3>
+          <p>“첫 방문부터 체크아웃까지 편안한 동선을 신경 썼어요. 머무는 동안 작은 불편도 없도록 필요한 것들을 먼저 안내드릴게요.”</p>
+          <div class="host-badge">
+            <div class="host-avatar"></div>
+            <div>
+              <strong>호스트 민지</strong>
+              <span>슈퍼호스트 · 응답률 98%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="rooms">
+      <div class="container">
+        <h2 class="section-title">공간 구성</h2>
+        <div class="grid-3 stagger">
+          <article class="room-card">
+            <h3>마스터 침실</h3>
+            <p>퀸사이즈 침대, 오션뷰 창, 암막 커튼으로 아침을 원하는 만큼 늦출 수 있습니다.</p>
+            <ul>
+              <li>퀸사이즈 침대 1</li>
+              <li>드레스룸</li>
+              <li>발코니 도어</li>
+            </ul>
+          </article>
+          <article class="room-card">
+            <h3>세컨드룸</h3>
+            <p>가족 혹은 친구를 위한 아늑한 공간. 라운드 조명과 빔 프로젝터가 준비돼 있습니다.</p>
+            <ul>
+              <li>싱글 침대 2</li>
+              <li>빔 프로젝터</li>
+              <li>작업 데스크</li>
+            </ul>
+          </article>
+          <article class="room-card">
+            <h3>거실 & 키친</h3>
+            <p>넓은 소파와 오픈 키친이 연결된 공간으로, 조리와 식사가 편안합니다.</p>
+            <ul>
+              <li>대형 소파</li>
+              <li>인덕션 & 오븐</li>
+              <li>6인 식탁</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="amenities">
+      <div class="container">
+        <h2 class="section-title">편의시설</h2>
+        <div class="amenities-grid stagger">
+          <div class="amenity-card">
+            <strong>온수 풀</strong>
+            <p>36~38도 유지, 사계절 운영</p>
+          </div>
+          <div class="amenity-card">
+            <strong>프라이빗 바비큐</strong>
+            <p>전기 그릴, 조리도구 제공</p>
+          </div>
+          <div class="amenity-card">
+            <strong>무드 라이트</strong>
+            <p>디머 조절, 촬영 최적화</p>
+          </div>
+          <div class="amenity-card">
+            <strong>키즈 세트</strong>
+            <p>유아 식기, 아기침대</p>
+          </div>
+          <div class="amenity-card">
+            <strong>스마트 체크인</strong>
+            <p>비대면 도어락</p>
+          </div>
+          <div class="amenity-card">
+            <strong>넷플릭스</strong>
+            <p>로그인만 하면 바로 이용</p>
           </div>
         </div>
       </div>
@@ -62,53 +190,106 @@
 
     <section class="section">
       <div class="container">
-        <h2 class="section-title">긴급 구인 브리핑</h2>
-        <div class="urgent-bar">
-          <div class="urgent-label">긴급구인</div>
-          <div class="ticker">
-            <div class="ticker-track" id="urgent-track"></div>
+        <h2 class="section-title">갤러리</h2>
+        <div class="gallery-grid">
+          <div class="photo-tile tile-1"></div>
+          <div class="photo-tile tile-2"></div>
+          <div class="photo-tile tile-3"></div>
+          <div class="photo-tile tile-4"></div>
+          <div class="photo-tile tile-5"></div>
+          <div class="photo-tile tile-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="guide">
+      <div class="container split reveal">
+        <div>
+          <h2 class="section-title">주변 안내</h2>
+          <p class="section-desc">도보 10분 거리에는 해변 산책로, 차로 15분 거리에는 로컬 맛집과 카페가 모여 있습니다. 여행 동선을 고민하지 않아도 되는 동네입니다.</p>
+          <div class="guide-list">
+            <div>
+              <strong>해변 산책로</strong>
+              <span>도보 10분</span>
+            </div>
+            <div>
+              <strong>로컬 카페 거리</strong>
+              <span>차로 8분</span>
+            </div>
+            <div>
+              <strong>노을 전망 포인트</strong>
+              <span>차로 12분</span>
+            </div>
+          </div>
+        </div>
+        <div class="map-card">
+          <div class="map-overlay">
+            <strong>스테이아미 STAY AMI</strong>
+            <span>정확한 주소는 예약 후 안내됩니다.</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="reviews">
       <div class="container">
-        <h2 class="section-title">최근 구인 공고</h2>
-        <p class="page-subtitle">업데이트 순으로 최신 공고를 확인하세요.</p>
-        <table class="board-table">
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>구인내용</th>
-              <th>회사명</th>
-              <th>모집직종</th>
-              <th>근무지</th>
-              <th>Update<br />모집마감</th>
-              <th>조회</th>
-            </tr>
-          </thead>
-          <tbody id="job-list" data-limit="4" data-empty-colspan="7"></tbody>
-        </table>
+        <h2 class="section-title">후기</h2>
+        <div class="review-grid stagger">
+          <article class="review-card">
+            <p>“숙소 사진 그대로였고 밤에 수영하면서 보는 별빛이 정말 최고였어요. 다음에도 꼭 다시 올게요.”</p>
+            <span>지민 · 2박 숙박</span>
+          </article>
+          <article class="review-card">
+            <p>“아이들과 함께 머물렀는데 모든 동선이 안전하고 깨끗했어요. 키즈 세트도 잘 준비되어 있었어요.”</p>
+            <span>현수 · 가족 여행</span>
+          </article>
+          <article class="review-card">
+            <p>“조용하고 프라이빗해서 힐링하기 딱입니다. 호스트도 친절하게 주변 맛집까지 알려주셨어요.”</p>
+            <span>수아 · 커플 여행</span>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container grid grid-2">
-        <div class="card">
-          <h3>채용 담당자를 위한 요약</h3>
-          <p>선원 면허, 승선 경력, 항로 적합성 데이터를 기반으로 빠르게 후보군을 정리합니다.</p>
-          <div class="hero-actions">
-            <a class="btn ghost" href="jobs.html">구인광고 보기</a>
+    <section class="section" id="contact">
+      <div class="container contact-grid reveal">
+        <div>
+          <h2 class="section-title">예약 및 문의</h2>
+          <p class="section-desc">원하는 날짜와 인원을 남겨주시면 맞춤 견적으로 안내드립니다. 체크인 전부터 머무는 동안 필요한 사항을 빠르게 공유합니다.</p>
+          <div class="contact-cards">
+            <div>
+              <strong>카카오톡</strong>
+              <span>@oceanmoonstay</span>
+            </div>
+            <div>
+              <strong>전화</strong>
+              <span>010-0000-0000</span>
+            </div>
+            <div>
+              <strong>이메일</strong>
+              <span>stay@oceanmoon.kr</span>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <h3>선원을 위한 커리어 지원</h3>
-          <p>면허 갱신과 안전교육 정보를 함께 제공해 이직 준비를 체계적으로 돕습니다.</p>
-          <div class="hero-actions">
-            <a class="btn" href="post-profile.html">프로필 등록</a>
-          </div>
-        </div>
+        <form class="contact-form">
+          <label>
+            이름
+            <input type="text" name="name" placeholder="성함을 적어주세요" />
+          </label>
+          <label>
+            연락처
+            <input type="tel" name="phone" placeholder="연락 가능한 번호" />
+          </label>
+          <label>
+            여행 일정
+            <input type="text" name="dates" placeholder="예: 7/20 - 7/22" />
+          </label>
+          <label>
+            문의 내용
+            <textarea name="message" placeholder="추가 요청 사항을 남겨주세요"></textarea>
+          </label>
+          <button class="btn" type="submit">문의 보내기</button>
+        </form>
       </div>
     </section>
   </main>
@@ -116,27 +297,20 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <strong>여객선 승선</strong>
-        <p>여객선 선원과 운항사를 연결하는 전문 채용 플랫폼.</p>
+        <strong>스테이아미 STAY AMI</strong>
+        <p>자연과 가까운 프라이빗 휴식 공간.</p>
       </div>
       <div>
-        <strong>바로가기</strong>
-        <div class="grid">
-          <a href="jobs.html">구인광고</a>
-          <a href="seekers.html">구직자</a>
-          <a href="post-job.html">구인등록</a>
-        </div>
+        <strong>예약 안내</strong>
+        <p>체크인 15:00 · 체크아웃 11:00</p>
+        <p>정확한 주소는 예약 확정 후 안내됩니다.</p>
       </div>
       <div>
-        <strong>고객센터</strong>
-        <div class="grid">
-          <span>평일 09:00 - 18:00</span>
-          <a href="mailto:hello@pado-crew.kr">hello@pado-crew.kr</a>
-        </div>
+        <strong>문의</strong>
+        <p>010-0000-0000</p>
+        <p>stay@oceanmoon.kr</p>
       </div>
     </div>
   </footer>
-
-  <script src="main.js"></script>
 </body>
 </html>
