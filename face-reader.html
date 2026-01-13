@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FACE READER | 얼굴 사진 분석</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="face-reader.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-grid">
+      <a class="brand" href="index.html">FACE READER</a>
+      <nav class="header-nav">
+        <a href="#insight">리포트</a>
+        <a href="#how">분석 방식</a>
+        <a href="#privacy">프라이버시</a>
+      </nav>
+      <a class="btn ghost" href="#upload">데모 보기</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">AI 얼굴 인사이트 리포트</p>
+          <h1>사진 한 장으로 표정, 분위기, 인상을 분석하세요.</h1>
+          <p class="hero-desc">
+            FACE READER는 얼굴 사진을 기반으로 시선 흐름, 감정 톤, 인상 키워드를 정리해 주는 비주얼 분석 도구입니다.
+            브랜드 프로필, 포트폴리오, 프로필 사진 선택에 활용할 수 있어요.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#upload">사진 업로드</a>
+            <a class="btn ghost" href="#insight">리포트 예시</a>
+          </div>
+          <div class="stat-row">
+            <div>
+              <strong>3초</strong>
+              <span>평균 분석 시간</span>
+            </div>
+            <div>
+              <strong>12개</strong>
+              <span>표정 디테일 항목</span>
+            </div>
+            <div>
+              <strong>97%</strong>
+              <span>선호도 매칭</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="upload-card" id="upload">
+            <div class="upload-header">
+              <strong>얼굴 사진 업로드</strong>
+              <span>PNG, JPG · 최대 10MB</span>
+            </div>
+            <div class="upload-drop" id="drop-zone">
+              <input id="face-input" type="file" accept="image/*" />
+              <div class="upload-text">
+                <p>이미지를 끌어오거나</p>
+                <p class="muted">버튼으로 사진을 선택하세요.</p>
+              </div>
+              <button class="btn" type="button" id="upload-btn">파일 선택</button>
+            </div>
+            <div class="preview">
+              <img id="preview-image" alt="업로드한 얼굴 사진 미리보기" />
+              <div class="preview-overlay">
+                <span>감정 온도</span>
+                <strong id="temp-value">--</strong>
+              </div>
+            </div>
+            <div class="upload-footnote">
+              업로드한 사진은 즉시 분석 후 삭제됩니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="insight">
+      <div class="container">
+        <div class="section-header">
+          <h2>리포트 스냅샷</h2>
+          <p>얼굴 특징을 수치와 키워드로 요약해 인상 설계를 돕습니다.</p>
+        </div>
+        <div class="insight-grid">
+          <article class="insight-card">
+            <h3>감정 톤</h3>
+            <p class="muted">안정감 68% · 친근함 81%</p>
+            <div class="meter">
+              <span>안정감</span>
+              <div class="bar"><div data-value="68"></div></div>
+            </div>
+            <div class="meter">
+              <span>친근함</span>
+              <div class="bar"><div data-value="81"></div></div>
+            </div>
+          </article>
+          <article class="insight-card">
+            <h3>인상 키워드</h3>
+            <div class="tag-list">
+              <span>신뢰감</span>
+              <span>차분함</span>
+              <span>전문성</span>
+              <span>따뜻함</span>
+            </div>
+            <p class="muted">프로필 소개 문구를 부드러운 톤으로 추천합니다.</p>
+          </article>
+          <article class="insight-card">
+            <h3>페이스 밸런스</h3>
+            <p class="muted">시선 중심: 오른쪽 4% · 얼굴 대비: 1.03</p>
+            <div class="meter">
+              <span>대칭성</span>
+              <div class="bar"><div data-value="74"></div></div>
+            </div>
+            <div class="meter">
+              <span>명암 균형</span>
+              <div class="bar"><div data-value="63"></div></div>
+            </div>
+          </article>
+          <article class="insight-card">
+            <h3>스타일 추천</h3>
+            <ul class="list">
+              <li>따뜻한 베이지 톤 배경</li>
+              <li>광원은 정면 30도</li>
+              <li>상반신 2/3 구도</li>
+              <li>무광 질감의 의상</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="container split">
+        <div>
+          <h2>분석은 이렇게 진행돼요</h2>
+          <p class="muted">
+            이미지 특징점, 표정 신호, 밝기 분포를 추출해 총 40개 이상의 지표로 정리합니다.
+            결과는 실시간으로 업데이트되며, 톤과 인상을 한눈에 확인할 수 있어요.
+          </p>
+          <div class="step-list">
+            <div>
+              <strong>1. 이미지 정규화</strong>
+              <span>얼굴 각도, 밝기, 배경을 보정합니다.</span>
+            </div>
+            <div>
+              <strong>2. 특징 추출</strong>
+              <span>표정 근육과 시선 방향을 추출합니다.</span>
+            </div>
+            <div>
+              <strong>3. 인상 매핑</strong>
+              <span>심리 톤과 인상 키워드를 연결합니다.</span>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <strong>요약 리포트</strong>
+            <span>맞춤형 톤 제안</span>
+          </div>
+          <div class="panel-body">
+            <div class="summary-item">
+              <span>메인 키워드</span>
+              <strong>신뢰감, 차분함, 프로페셔널</strong>
+            </div>
+            <div class="summary-item">
+              <span>추천 문구 톤</span>
+              <strong>짧고 단단한 문장형</strong>
+            </div>
+            <div class="summary-item">
+              <span>보완 포인트</span>
+              <strong>조명 대비 +10%</strong>
+            </div>
+            <button class="btn wide" type="button">리포트 다운로드</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section privacy" id="privacy">
+      <div class="container">
+        <div class="privacy-grid">
+          <div>
+            <h2>프라이버시 우선</h2>
+            <p class="muted">FACE READER는 얼굴 사진을 저장하지 않습니다. 분석 후 즉시 삭제됩니다.</p>
+          </div>
+          <div class="privacy-cards">
+            <div>
+              <strong>로컬 암호화</strong>
+              <p>업로드 과정에서 TLS 기반으로 안전하게 보호됩니다.</p>
+            </div>
+            <div>
+              <strong>자동 삭제</strong>
+              <p>분석 결과 생성 후 10초 내 데이터가 폐기됩니다.</p>
+            </div>
+            <div>
+              <strong>투명한 로그</strong>
+              <p>분석 기록은 사용자에게만 보여집니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>FACE READER</strong>
+        <p>얼굴 이미지에서 브랜드 인상을 읽어내는 AI 리포트.</p>
+      </div>
+      <div>
+        <strong>문의</strong>
+        <div class="grid">
+          <span>help@face-reader.ai</span>
+          <span>평일 10:00 - 18:00</span>
+        </div>
+      </div>
+      <div>
+        <strong>정책</strong>
+        <div class="grid">
+          <span>개인정보 처리방침</span>
+          <span>서비스 이용약관</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="face-reader.js"></script>
+</body>
+</html>
