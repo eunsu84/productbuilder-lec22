@@ -14,7 +14,6 @@
         body {
             font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
             background-color: var(--vintage-bg);
-            color: var(--vintage-dark);
             margin: 0;
             display: flex;
             justify-content: center;
@@ -32,85 +31,86 @@
             text-align: center;
         }
 
-        h1 { font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
-        p.subtitle { font-size: 0.9rem; color: #777; margin-bottom: 30px; }
-
-        .upload-area {
-            border: 2px dashed #ccc;
-            padding: 40px 20px;
+        /* 합성 이미지가 보여질 컨테이너 */
+        .result-frame {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
             margin-bottom: 20px;
-            cursor: pointer;
-            transition: 0.3s;
+            background: #222;
+            border: 5px solid #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
 
-        .upload-area:hover { border-color: var(--accent); background: #fafafa; }
-
-        .btn {
-            background: var(--vintage-dark);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            width: 100%;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn:hover { background: var(--accent); }
-
-        #result { display: none; margin-top: 20px; border-top: 2px double var(--vintage-dark); padding-top: 20px; }
-        
-        .result-img {
-            width: 100%;
-            height: 250px;
-            background: #ddd;
-            margin-bottom: 15px;
-            filter: sepia(0.8) contrast(1.2); /* 빈티지 효과 */
+        /* [핵심] 사용자의 얼굴 사진 (AI 변환 효과) */
+        .user-face {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             object-fit: cover;
+            filter: grayscale(100%) sepia(50%) contrast(1.1) brightness(0.9);
+            mix-blend-mode: multiply; /* 배경과 합성되는 효과 */
         }
 
+        /* [핵심] 시대별 의상/배경 오버레이 */
+        .vintage-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1510531704581-5b2870972060?auto=format&fit=crop&q=80&w=500') no-repeat center;
+            background-size: cover;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .grain { /* 필름 노이즈 효과 */
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .upload-area { border: 2px dashed #ccc; padding: 40px 20px; margin-bottom: 20px; cursor: pointer; }
+        .btn { background: var(--vintage-dark); color: white; padding: 15px 30px; border: none; width: 100%; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        #result, #loading { display: none; }
         .tag { display: inline-block; background: var(--vintage-bg); padding: 5px 10px; font-size: 0.8rem; margin: 5px; border-radius: 15px; }
-        
-        /* 로딩 애니메이션 */
-        #loading { display: none; margin: 20px 0; font-style: italic; color: var(--accent); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="home">
-        <p style="margin: 0; font-size: 0.8rem; letter-spacing: 2px;">PARALLEL UNIVERSE</p>
         <h1>나의 현대적 전생</h1>
-        <p class="subtitle">100년 전, 당신은 어떤 삶을 살고 있었을까요?<br>관상으로 보는 평행우주 전생 리포트</p>
-        
+        <p>사진을 올리면 100년 전 모습으로 합성합니다.</p>
         <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <span id="uploadText">📷 이곳을 눌러 사진 업로드</span>
+            <span id="uploadText">📷 이곳을 눌러 얼굴 사진 업로드</span>
             <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="previewImage(this)">
             <img id="preview" style="display:none; width:100%; margin-top:10px;">
         </div>
-
-        <button class="btn" onclick="startAnalysis()">전생 확인하기</button>
+        <button class="btn" onclick="startAnalysis()">AI 전생 합성 시작</button>
     </div>
 
-    <div id="loading">관상을 통해 시공간을 분석 중입니다...</div>
+    <div id="loading">
+        <p>AI가 얼굴 특징을 추출하여<br>1920년대 의상과 합성 중입니다...</p>
+    </div>
 
     <div id="result">
-        <p style="font-size: 0.8rem; color: var(--accent);">당신의 전생 결과</p>
-        <h2 id="roleTitle">종로를 누비던 모던 보이</h2>
-        <img src="" id="resultImg" class="result-img" alt="전생 사진">
-        
-        <div id="tags">
-            <span class="tag">#낭만주의자</span>
-            <span class="tag">#커피매니아</span>
-            <span class="tag">#독보적_패션센스</span>
+        <h2>종로를 누비던 모던 보이</h2>
+        <div class="result-frame">
+            <img src="" id="resultImg" class="user-face">
+            <div class="vintage-overlay"></div>
+            <div class="grain"></div>
         </div>
-
-        <p id="description" style="line-height: 1.6; text-align: left; font-size: 0.95rem; margin-top: 20px;">
-            눈매에서 뿜어져 나오는 세련된 기질이 100년 전에도 숨겨지지 않았네요. 당신은 당시 가장 트렌디한 카페에서 에스프레소를 즐기며 새로운 시대를 논하던 지식인이었을 확률이 높습니다.
+        <div id="tags">
+            <span class="tag">#지식인</span><span class="tag">#독립운동</span><span class="tag">#미스터션샤인</span>
+        </div>
+        <p style="font-size: 0.9rem; line-height: 1.5; color: #555;">
+            분석 결과, 당신은 1920년대 경성에서 활동하던 문학청년이었습니다. 낡은 원고지와 잉크 냄새가 당신의 관상에서 느껴집니다.
         </p>
-
-        <button class="btn" onclick="location.reload()" style="margin-top: 20px; background: none; color: #777; border: 1px solid #ccc;">다시 하기</button>
+        <button class="btn" onclick="location.reload()" style="background: #ccc; margin-top: 10px;">다시 하기</button>
     </div>
 </div>
 
@@ -118,40 +118,26 @@
     function previewImage(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = (e) => {
                 document.getElementById('preview').src = e.target.result;
                 document.getElementById('preview').style.display = 'block';
                 document.getElementById('uploadText').style.display = 'none';
-            }
+            };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
     function startAnalysis() {
-        const file = document.getElementById('fileInput').files[0];
-        if (!file) {
-            alert("사진을 먼저 업로드해주세요!");
-            return;
-        }
-
+        if (!document.getElementById('fileInput').files[0]) return alert("사진을 올려주세요!");
         document.getElementById('home').style.display = 'none';
         document.getElementById('loading').style.display = 'block';
 
-        // 2초간 분석하는 척 지연
         setTimeout(() => {
             document.getElementById('loading').style.display = 'none';
-            showResult();
-        }, 2500);
-    }
-
-    function showResult() {
-        // 실제로는 여기서 AI 서버로 사진을 보내 결과를 받아옵니다.
-        // 여기서는 예시로 업로드한 사진을 빈티지하게 보여줍니다.
-        const previewSrc = document.getElementById('preview').src;
-        document.getElementById('resultImg').src = previewSrc;
-        document.getElementById('result').style.display = 'block';
+            document.getElementById('resultImg').src = document.getElementById('preview').src;
+            document.getElementById('result').style.display = 'block';
+        }, 3000); // 3초간 합성하는 척 연출
     }
 </script>
-
 </body>
 </html>
