@@ -22,124 +22,140 @@
         }
 
         .main-card {
-            width: 100%; max-width: 800px;
+            width: 100%; max-width: 480px;
             background: var(--card-bg);
             border: 1px solid #c9c0b7;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            position: relative; padding: 40px;
-            /* 테두리 장식 */
-            outline: 15px solid var(--card-bg);
-            outline-offset: -20px;
+            padding: 40px 30px;
             border-radius: 2px;
+            position: relative;
         }
 
         /* 헤더 스타일 */
-        header { border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 30px; }
-        .sub-title { font-size: 0.8rem; letter-spacing: 2px; color: #8d6e63; text-transform: uppercase; }
-        h1 { font-size: 1.8rem; margin: 10px 0; font-weight: 800; }
+        header { border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 30px; text-align: center; }
+        .sub-title { font-size: 0.75rem; letter-spacing: 2px; color: #8d6e63; text-transform: uppercase; }
+        h1 { font-size: 1.6rem; margin: 10px 0; font-weight: 800; }
 
-        /* 메인 컨텐츠 레이아웃 */
-        .content-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+        /* 페이지 전환용 섹션 제어 */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
 
-        /* 왼쪽: 업로드 및 설명 섹션 */
-        .upload-section { text-align: left; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 메인 페이지(STEP 1) 스타일 */
         .upload-box {
-            border: 2px dashed #bbb; padding: 30px 15px; border-radius: 10px;
-            cursor: pointer; background: #fbf9f6; transition: 0.3s;
+            border: 2px dashed #bbb; padding: 50px 20px; border-radius: 10px;
+            cursor: pointer; background: #fbf9f6; transition: 0.3s; text-align: center;
         }
         .upload-box:hover { background: #f5f1ed; border-color: var(--accent-color); }
-        
-        .btn-start {
-            background: var(--accent-color); color: white; width: 100%;
-            padding: 15px; border: none; border-radius: 5px; font-weight: bold;
-            font-size: 1.1rem; margin-top: 20px; cursor: pointer;
-        }
+        .guide-list { text-align: left; margin: 25px 0; font-size: 0.9rem; color: #666; line-height: 1.8; }
 
-        /* 오른쪽: 결과 프리뷰/이미지 섹션 */
-        .result-section { position: relative; }
+        /* 결과 페이지(STEP 2) 스타일 */
         .image-frame {
-            width: 100%; border: 10px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: #eee; min-height: 300px; position: relative; overflow: hidden;
+            width: 100%; border: 8px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #eee; position: relative; overflow: hidden; margin-bottom: 20px;
         }
-        .image-frame img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.4) contrast(1.1); }
+        .image-frame img { width: 100%; display: block; filter: sepia(0.3) contrast(1.1); }
         
-        .tags { margin-top: 15px; font-size: 0.85rem; color: #6d4c41; line-height: 1.6; }
+        .tags { font-size: 0.85rem; color: #6d4c41; line-height: 1.6; margin-bottom: 20px; text-align: center; }
 
-        /* 궁합/인연 섹션 (이미지 참고) */
         .affinity-box {
-            margin-top: 25px; padding: 20px; background: #faf8f5;
-            border: 1px dashed #d1c4e9; border-radius: 8px; text-align: left;
+            padding: 20px; background: #faf8f5; border: 1px dashed #d1c4e9; border-radius: 8px;
         }
-        .affinity-item { display: flex; align-items: flex-start; margin-bottom: 15px; }
-        .icon-circle { width: 35px; height: 35px; border-radius: 50%; background: #eee; margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-        .affinity-text b { display: block; font-size: 0.95rem; }
+        .match-title { font-weight: bold; margin-bottom: 15px; font-size: 0.95rem; color: var(--accent-color); text-align: center; }
+        .affinity-item { display: flex; align-items: flex-start; margin-bottom: 12px; text-align: left; }
+        .icon-circle { width: 35px; height: 35px; border-radius: 50%; background: #eee; margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .affinity-text b { display: block; font-size: 0.9rem; }
         .affinity-text span { font-size: 0.8rem; color: #777; }
 
-        /* 공유 버튼 섹션 */
-        .share-row { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
-        .share-btn { width: 35px; height: 35px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; }
-        .kakao { background: #fee500; color: #3c1e1e; }
-        .insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-        .link { background: #424242; }
+        /* 공유 버튼 및 하단 액션 */
+        .share-row { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+        .share-btn { width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .btn-action {
+            background: var(--accent-color); color: white; width: 100%;
+            padding: 15px; border: none; border-radius: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
+        }
 
-        @media (max-width: 600px) { .content-grid { grid-template-columns: 1fr; } }
+        /* 로딩 화면 */
+        #loading-overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 253, 250, 0.9); z-index: 10;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="main-card">
+    <div id="loading-overlay">
+        <div style="font-size: 3rem;">⌛</div>
+        <p>전생의 기록을 불러오는 중...</p>
+    </div>
+
     <header>
         <div class="sub-title">PREVIOUS LIFE & AFFINITY</div>
         <h1>나의 현대적 전생 & 궁합</h1>
     </header>
 
-    <div class="content-grid">
-        <div class="upload-section" id="home">
-            <h3 style="margin-top:0;">나를 찾는 시간 여행</h3>
-            <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">📷</div>
-                <div id="uploadText">얼굴이 선명한 사진을<br>선택해 주세요</div>
-                <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="previewImage(this)">
-                <img id="preview" style="display:none; width:100%; border-radius: 5px; margin-top: 10px;">
+    <div id="step-1" class="page active">
+        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+            <div id="preview-container" style="display:none;">
+                <img id="preview" style="width:100%; border-radius: 5px;">
             </div>
-            <button class="btn-start" onclick="processResult()">결과 확인하기</button>
-            <p style="font-size: 0.75rem; color: #999; margin-top: 15px;">*사진은 분석 후 즉시 삭제되며 외부에 저장되지 않습니다.</p>
+            <div id="upload-icon">
+                <div style="font-size: 3rem; margin-bottom: 10px;">👤</div>
+                <b>사진을 업로드 해주세요</b>
+                <p style="font-size:0.8rem; color:#888;">정면 얼굴 사진이 가장 정확합니다</p>
+            </div>
+            <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="previewImage(this)">
         </div>
 
-        <div class="result-section" id="result-view">
-            <div class="share-row">
-                <button class="share-btn kakao">💬</button>
-                <button class="share-btn insta">📸</button>
-                <button class="share-btn link">🔗</button>
-            </div>
+        <div class="guide-list">
+            • AI가 관상을 분석하여 100년 전 전생을 추적합니다.<br>
+            • 전생의 직업, 성격, 나쁜 인연과 좋은 인연을 알려드립니다.<br>
+            • 사진은 어디에도 저장되지 않으니 안심하세요.
+        </div>
 
-            <div class="image-frame">
-                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=500" id="resImg">
-            </div>
-            
-            <div class="tags">
-                #전생 #전직_학자 #경성시대 #지적인_매력<br>
-                #냉철한_판단력 #현생에서도_성공할_관상
-            </div>
+        <button class="btn-action" onclick="goNext()">전생 확인하기</button>
+    </div>
 
-            <div class="affinity-box">
-                <div style="font-weight: bold; margin-bottom: 15px; color: var(--accent-color);">꿀맛과 꿀조합 (인연)</div>
-                <div class="affinity-item">
-                    <div class="icon-circle" style="background: #efebe9;">🤝</div>
-                    <div class="affinity-text">
-                        <b>전생의 찰떡 동료: [열혈 독립군]</b>
-                        <span>당신의 지략을 행동으로 옮겨주던 최고의 파트너</span>
-                    </div>
+    <div id="step-2" class="page">
+        <div class="share-row">
+            <button class="share-btn" style="background:#fee500;">💬</button>
+            <button class="share-btn" style="background:#e1306c; color:white;">📸</button>
+            <button class="share-btn" style="background:#424242; color:white;">🔗</button>
+        </div>
+
+        <h2 style="text-align:center; margin-bottom:20px;">자유를 꿈꾸던 가객</h2>
+
+        <div class="image-frame">
+            <img src="" id="resImg">
+        </div>
+        
+        <div class="tags">
+            #전생 #예술가기질 #경성시대 #낭만파<br>
+            #자유로운_영혼 #창의적인_에너지
+        </div>
+
+        <div class="affinity-box">
+            <div class="match-title">📜 전생의 인연 리포트</div>
+            <div class="affinity-item">
+                <div class="icon-circle">🤝</div>
+                <div class="affinity-text">
+                    <b>전생의 찰떡궁합: [열혈 독립군]</b>
+                    <span>당신을 묵묵히 지켜주던 든든한 동료입니다.</span>
                 </div>
-                <div class="affinity-item">
-                    <div class="icon-circle" style="background: #fbe9e7;">⚡</div>
-                    <div class="affinity-text">
-                        <b>전생의 숙적: [욕심 많은 지주]</b>
-                        <span>사사건건 당신의 논리를 시기하던 영원한 라이벌</span>
-                    </div>
+            </div>
+            <div class="affinity-item">
+                <div class="icon-circle">⚡</div>
+                <div class="affinity-text">
+                    <b>전생의 숙적: [욕심 많은 지주]</b>
+                    <span>당신의 예술 활동을 방해하던 천적입니다.</span>
                 </div>
             </div>
         </div>
+
+        <button class="btn-action" onclick="location.reload()" style="background:#9e9e9e; margin-top:20px;">다시 하기</button>
     </div>
 </div>
 
@@ -148,29 +164,29 @@
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                const preview = document.getElementById('preview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                document.getElementById('uploadText').style.display = 'none';
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview-container').style.display = 'block';
+                document.getElementById('upload-icon').style.display = 'none';
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    function processResult() {
+    function goNext() {
         const file = document.getElementById('fileInput').files[0];
-        if (!file) { alert("사진을 업로드해주세요!"); return; }
-        
-        // 버튼 로딩 상태 연출
-        const btn = document.querySelector('.btn-start');
-        btn.innerText = "분석 중...";
-        btn.disabled = true;
+        if (!file) { alert("먼저 사진을 업로드해주세요!"); return; }
+
+        // 로딩 연출
+        const loading = document.getElementById('loading-overlay');
+        loading.style.display = 'flex';
 
         setTimeout(() => {
+            loading.style.display = 'none';
+            document.getElementById('step-1').classList.remove('active');
+            document.getElementById('step-2').classList.add('active');
             document.getElementById('resImg').src = document.getElementById('preview').src;
-            btn.innerText = "분석 완료!";
-            alert("전생 분석이 완료되었습니다!");
-        }, 2000);
+            window.scrollTo(0, 0);
+        }, 2500);
     }
 </script>
 
