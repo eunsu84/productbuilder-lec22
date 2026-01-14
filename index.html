@@ -442,6 +442,7 @@
             id="resImg"
             alt="result"
           />
+          <canvas id="resCanvas" style="width:100%; height:100%; display:none;"></canvas>
           <div class="skeleton"></div>
         </div>
 
@@ -746,6 +747,13 @@
 
       await new Promise(res => setTimeout(res, 1200));
       await setResultImage(preview.src);
+      // ✅ 회화풍 변환(전생 초상화 느낌)
+      await renderPainterlyPastLife(preview.src, {
+        strength: 0.9,
+        palette: 16,
+        edge: 0.40,
+        paper: 0.20
+      });
 
       startBtn.textContent = "✨ 결과 확인하기";
       startBtn.disabled = false;
@@ -767,6 +775,13 @@
       const imgUrl = pick(pools.demoImages);
       await new Promise(res => setTimeout(res, 700));
       await setResultImage(imgUrl);
+      // ✅ 회화풍 변환(전생 초상화 느낌)
+      await renderPainterlyPastLife(imgUrl, {
+        strength: 0.9,
+        palette: 16,
+        edge: 0.40,
+        paper: 0.20
+      });
 
       demoBtn.textContent = "🎭 데모 모드";
       startBtn.disabled = false;
@@ -814,6 +829,242 @@
       }
       alert("PNG 저장 기능은 이전 코드에 포함된 renderCardToPNG/다운로드 로직을 그대로 유지하면 됩니다.\n(원하면 여기에도 전체를 합쳐서 넣어줄게요)");
     });
+    async function renderPainterlyPastLife(imageSrc, opts = {}) {
+  const {
+    strength = 0.85,     // 0~1 (회화풍 강도)
+    palette = 18,        // 색 개수(낮을수록 그림 느낌)
+    edge = 0.35,         // 윤곽선 강도
+    paper = 0.18         // 종이 질감 강도
+  } = opts;
+
+  const canvas = document.getElementById("resCanvas");
+  const imgEl = document.getElementById("resImg");
+
+  // 프레임 크기 기반으로 캔버스 실제 픽셀 크기 설정
+  const frame = document.getElementById("frame");
+  const rect = frame.getBoundingClientRect();
+  // 화면 렌더 품질을 위해 2배 정도
+  const W = Math.max(800, Math.floor(rect.width * 2));
+  const H = Math.max(520, Math.floor(rect.height * 2));
+
+  canvas.width = W;
+  canvas.height = H;
+
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  // 이미지 로드
+  const img = await loadImageSafe(imageSrc);
+
+  // cover draw
+  const cover = coverRect(img.width, img.height, W, H);
+  ctx.drawImage(img, cover.sx, cover.sy, cover.sw, cover.sh, 0, 0, W, H);
+
+  // 1) 부드럽게(붓 느낌 기반) - blur
+  // 브라우저 지원되는 filter 이용(간단/빠름)
+  ctx.save();
+  const blurPx = Math.round(2 + 6 * strength);
+  ctx.filter = `blur(${blurPx}px) saturate(${1.05 + 0.35*strength}) contrast(${1.03 + 0.25*strength})`;
+  const tmp = ctx.getImageData(0, 0, W, H);
+  ctx.clearRect(0,0,W,H);
+  ctx.putImageData(tmp, 0, 0);
+  ctx.restore();
+
+  // 2) 색 단순화(팔레트화) + 포스터라이즈
+  let data = ctx.getImageData(0, 0, W, H);
+  posterizeAndQuantize(data.data, palette, strength);
+  ctx.putImageData(data, 0, 0);
+
+  // 3) 윤곽선(엣지) 추출 후, 잉크 라인처럼 얹기
+  const edges = sobelEdgeMap(data, W, H);
+  overlayEdges(ctx, edges, W, H, edge * strength);
+
+  // 4) 종이 질감(동양화/한지 느낌) 오버레이
+  overlayPaper(ctx, W, H, paper * strength);
+
+  // 5) 약간의 워시(수묵/유화 느낌 톤 정리)
+  overlayWash(ctx, W, H, strength);
+
+  // 표시 전환
+  imgEl.style.display = "none";
+  canvas.style.display = "block";
+
+  return canvas.toDataURL("image/png");
+}
+
+function loadImageSafe(src){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function coverRect(sw, sh, dw, dh){
+  const sRatio = sw/sh, dRatio = dw/dh;
+  let cw, ch, sx, sy;
+  if (sRatio > dRatio){
+    ch = sh;
+    cw = sh * dRatio;
+    sx = (sw - cw)/2; sy = 0;
+  } else {
+    cw = sw;
+    ch = sw / dRatio;
+    sx = 0; sy = (sh - ch)/2;
+  }
+  return { sx, sy, sw: cw, sh: ch };
+}
+
+function posterizeAndQuantize(d, palette, strength){
+  // palette: 8~32 권장 (낮을수록 더 그림 느낌)
+  // 강도 높을수록 더 과감하게 단순화
+  const levels = Math.max(6, Math.min(48, Math.round(palette)));
+  const step = 255 / (levels - 1);
+
+  // “붓 터치” 느낌: 채널별로 약간 다른 양자화
+  for(let i=0;i<d.length;i+=4){
+    let r = d[i], g = d[i+1], b = d[i+2];
+
+    // 살짝 톤 웜(유화/동양화 느낌)
+    r = r + 12*strength;
+    b = b - 8*strength;
+
+    // 양자화(포스터라이즈)
+    r = Math.round(r/step)*step;
+    g = Math.round(g/step)*step;
+    b = Math.round(b/step)*step;
+
+    // 미세한 색 번짐(계조 띠 느낌 완화)
+    const jitter = (Math.random()*2-1) * (6*strength);
+    d[i]   = clamp255(r + jitter);
+    d[i+1] = clamp255(g + jitter*0.7);
+    d[i+2] = clamp255(b + jitter*0.8);
+  }
+}
+
+function sobelEdgeMap(imageData, W, H){
+  // 그레이스케일로 변환한 뒤 Sobel
+  const src = imageData.data;
+  const gray = new Float32Array(W*H);
+
+  for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+      const i = (y*W + x)*4;
+      gray[y*W+x] = 0.299*src[i] + 0.587*src[i+1] + 0.114*src[i+2];
+    }
+  }
+
+  const out = new Float32Array(W*H);
+  const gxK = [-1,0,1,-2,0,2,-1,0,1];
+  const gyK = [-1,-2,-1,0,0,0,1,2,1];
+
+  for(let y=1;y<H-1;y++){
+    for(let x=1;x<W-1;x++){
+      let gx = 0, gy = 0, k = 0;
+      for(let j=-1;j<=1;j++){
+        for(let i=-1;i<=1;i++){
+          const v = gray[(y+j)*W + (x+i)];
+          gx += v * gxK[k];
+          gy += v * gyK[k];
+          k++;
+        }
+      }
+      const mag = Math.sqrt(gx*gx + gy*gy);
+      out[y*W+x] = mag; // 0~(대략 1020)
+    }
+  }
+
+  // 정규화
+  let max = 1;
+  for(let i=0;i<out.length;i++) if(out[i] > max) max = out[i];
+  for(let i=0;i<out.length;i++) out[i] = out[i] / max; // 0~1
+
+  return out;
+}
+
+function overlayEdges(ctx, edges, W, H, amount){
+  // amount: 0~1
+  if(amount <= 0) return;
+
+  const img = ctx.getImageData(0,0,W,H);
+  const d = img.data;
+
+  // 잉크 라인 색(짙은 갈색)
+  const inkR = 45, inkG = 28, inkB = 22;
+
+  for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+      const e = edges[y*W+x]; // 0~1
+      // 임계값 + 곡선
+      const t = smoothStep(0.18, 0.55, e) * amount;
+
+      if(t > 0){
+        const i = (y*W + x)*4;
+        // 어두운 라인으로 섞기
+        d[i]   = d[i]   * (1 - t) + inkR * t;
+        d[i+1] = d[i+1] * (1 - t) + inkG * t;
+        d[i+2] = d[i+2] * (1 - t) + inkB * t;
+      }
+    }
+  }
+  ctx.putImageData(img,0,0);
+}
+
+function overlayPaper(ctx, W, H, amount){
+  if(amount <= 0) return;
+
+  // 종이 질감: 밝은 점 + 섬유 결 라인
+  const img = ctx.getImageData(0,0,W,H);
+  const d = img.data;
+
+  for(let i=0;i<d.length;i+=4){
+    const n = (Math.random()*2-1) * 22 * amount; // grain
+    d[i]   = clamp255(d[i]   + n);
+    d[i+1] = clamp255(d[i+1] + n);
+    d[i+2] = clamp255(d[i+2] + n);
+  }
+
+  // 섬유 결: 가로 결 느낌
+  for(let y=0;y<H;y+=3){
+    const line = (Math.random()*2-1) * 16 * amount;
+    for(let x=0;x<W;x++){
+      const i = (y*W + x)*4;
+      d[i]   = clamp255(d[i]   + line);
+      d[i+1] = clamp255(d[i+1] + line);
+      d[i+2] = clamp255(d[i+2] + line);
+    }
+  }
+
+  ctx.putImageData(img,0,0);
+
+  // 따뜻한 종이톤 워시
+  ctx.save();
+  ctx.globalAlpha = 0.20 * amount;
+  ctx.fillStyle = "#b79f86";
+  ctx.fillRect(0,0,W,H);
+  ctx.restore();
+}
+
+function overlayWash(ctx, W, H, strength){
+  ctx.save();
+  ctx.globalAlpha = 0.18 * strength;
+  // 수채/유화 워시 느낌
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0, "rgba(141,110,99,0.55)");
+  g.addColorStop(1, "rgba(93,64,55,0.35)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
+  ctx.restore();
+}
+
+function smoothStep(edge0, edge1, x){
+  const t = clamp01((x - edge0) / (edge1 - edge0));
+  return t*t*(3 - 2*t);
+}
+function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+function clamp255(v){ return Math.max(0, Math.min(255, v)); }
+
   </script>
 </body>
 </html>
