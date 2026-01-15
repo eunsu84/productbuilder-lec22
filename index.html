@@ -41,7 +41,18 @@
     <div id="result">
         <h3>📊 검사 결과 요약</h3>
         <div id="result-content"></div>
-        <p style="font-size: 0.9em; color: #777; margin-top: 20px;">* 본 결과는 입력하신 내용을 바탕으로 합니다. 심층적인 상담은 전문가와 상의하세요.</p>
+        
+        <div id="analysis-section" style="margin-top: 25px; padding-top: 20px; border-top: 2px dashed #ccc;">
+            <h4 style="color: #4a90e2;">🧠 심리 상태 분석</h4>
+            <p id="psych-analysis" style="font-weight: bold; color: #555;"></p>
+            
+            <h4 style="color: #2ecc71; margin-top: 20px;">💡 맞춤형 솔루션</h4>
+            <div id="solution-box" style="background: white; padding: 15px; border-left: 4px solid #2ecc71; border-radius: 4px;">
+                <p id="psych-solution" style="margin: 0; color: #333;"></p>
+            </div>
+        </div>
+
+        <p style="font-size: 0.9em; color: #777; margin-top: 20px;">* 본 결과는 입력하신 내용을 바탕으로 한 간단한 분석입니다. 심층적인 상담은 전문가와 상의하세요.</p>
         <button onclick="location.reload()" style="background-color: #999;">다시 작성하기</button>
     </div>
 </div>
@@ -55,14 +66,77 @@
         ];
         
         let resultHtml = "";
+        let allAnswers = "";
+
         for(let i=1; i<=10; i++) {
             let answer = document.getElementById('q' + i).value;
             if(!answer) answer = "(미입력)";
+            else allAnswers += answer + " ";
+            
             resultHtml += `<div class="result-item"><strong>${questions[i-1]}:</strong> ${answer}</div>`;
+        }
+        
+        // 간단한 키워드 기반 분석 로직
+        const keywords = {
+            positive: ['기쁨', '행복', '즐거움', '좋다', '편안', '만족', '웃음', '사랑', '희망', '감사', '긍정', '신나', '성취', '보람'],
+            negative: ['슬픔', '우울', '눈물', '힘들다', '지친다', '괴롭다', '절망', '포기', '어둠', '혼자', '외로움', '아픔', '상처', '비참'],
+            anxious: ['불안', '걱정', '초조', '무섭다', '두렵다', '떨린다', '긴장', '압박', '스트레스', '도망', '눈치', '고민'],
+            angry: ['화', '분노', '짜증', '복수', '싸움', '싫다', '미움', '공격', '폭발', '억울', '답답', '열받', '증오']
+        };
+
+        let scores = { positive: 0, negative: 0, anxious: 0, angry: 0 };
+        
+        // 답변 전체에서 키워드 카운팅
+        allAnswers.split(' ').forEach(word => {
+            for (const [emotion, wordList] of Object.entries(keywords)) {
+                if (wordList.some(k => word.includes(k))) {
+                    scores[emotion]++;
+                }
+            }
+        });
+
+        // 가장 높은 점수의 감정 찾기
+        let maxScore = 0;
+        let dominantEmotion = 'neutral';
+        
+        for (const [emotion, score] of Object.entries(scores)) {
+            if (score > maxScore) {
+                maxScore = score;
+                dominantEmotion = emotion;
+            }
+        }
+
+        let analysisText = "";
+        let solutionText = "";
+
+        if (maxScore === 0) {
+            analysisText = "특별히 치우친 감정 상태가 나타나지 않았습니다. 차분하고 평온한 상태이거나, 감정을 크게 드러내지 않는 성향일 수 있습니다.";
+            solutionText = "현재의 균형 잡힌 마음을 유지하면서, 자신의 내면을 조금 더 깊이 들여다보는 시간을 가져보세요. 일기 쓰기나 명상이 도움이 될 수 있습니다.";
+        } else {
+            switch(dominantEmotion) {
+                case 'positive':
+                    analysisText = "현재 당신은 긍정적인 에너지가 넘치고, 삶에 대한 만족도가 높은 상태로 보입니다. 자신감 있고 희망찬 태도가 돋보입니다.";
+                    solutionText = "지금의 좋은 에너지를 주변 사람들과 나누어 보세요. 새로운 목표에 도전하거나 취미를 확장하기에 아주 좋은 시기입니다!";
+                    break;
+                case 'negative':
+                    analysisText = "마음속에 슬픔이나 우울감, 혹은 지친 감정이 많이 자리 잡고 있는 것 같습니다. 휴식과 위로가 필요한 상태입니다.";
+                    solutionText = "스스로를 너무 몰아세우지 마세요. 충분한 휴식을 취하고, 신뢰할 수 있는 친구나 가족에게 솔직한 감정을 털어놓는 것이 큰 힘이 됩니다. 필요하다면 전문가의 도움을 받는 것도 용기 있는 선택입니다.";
+                    break;
+                case 'anxious':
+                    analysisText = "미래에 대한 걱정이나 현재 상황에 대한 압박감으로 인해 불안과 긴장도가 높은 상태로 보입니다.";
+                    solutionText = "잠시 하던 일을 멈추고 깊게 심호흡을 해보세요. '지금, 여기'에 집중하는 마인드풀니스 연습이 도움이 됩니다. 걱정하는 일의 대부분은 실제로 일어나지 않는다는 사실을 기억하세요.";
+                    break;
+                case 'angry':
+                    analysisText = "내면에 억눌린 화나 답답함, 혹은 타인이나 상황에 대한 불만이 쌓여있는 것으로 보입니다.";
+                    solutionText = "감정을 억누르기보다 건강하게 해소하는 방법이 필요합니다. 격렬한 운동, 소리 지르기, 또는 감정을 글로 써서 찢어버리는 행위 등이 도움이 될 수 있습니다. 화의 원인을 차분히 들여다보는 시간도 가져보세요.";
+                    break;
+            }
         }
         
         document.getElementById('survey-form').style.display = 'none';
         document.getElementById('result-content').innerHTML = resultHtml;
+        document.getElementById('psych-analysis').innerText = analysisText;
+        document.getElementById('psych-solution').innerText = solutionText;
         document.getElementById('result').style.display = 'block';
     }
 </script>
