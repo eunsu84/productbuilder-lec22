@@ -2,33 +2,70 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나의 10년 후 미래 모습은?</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <title>마음 거울 - 문장완성검사</title>
+    <style>
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: #f0f2f5; padding: 20px; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: #4a90e2; text-align: center; }
+        .question { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background-color: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        button:hover { background-color: #357abd; }
+        #result { margin-top: 30px; display: none; padding: 20px; background: #eef7ff; border-radius: 10px; }
+        .result-item { margin-bottom: 10px; border-bottom: 1px dotted #ccc; padding-bottom: 5px; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>나의 10년 후 미래 모습은?</h1>
-        <p>"다른 평행 우주에서의 내 직업은?"</p>
-        <div class="upload-container">
-            <input type="file" id="upload-photo" accept="image/*">
-            <label for="upload-photo" class="upload-label">사진 업로드</label>
-        </div>
-        <button id="analyze-button">분석하기</button>
-        <div id="result-container" class="hidden">
-            <img id="future-photo" src="" alt="미래 사진">
-            <p id="future-description"></p>
-            <div class="share-buttons">
-                <button id="share-twitter">트위터에 공유</button>
-                <button id="share-facebook">페이스북에 공유</button>
-                <button id="share-kakao">카카오톡에 공유</button>
-            </div>
-        </div>
-        <div class="loading-spinner hidden"></div>
+
+<div class="container">
+    <h2>📝 문장완성검사 (SCT)</h2>
+    <p style="text-align: center; color: #666;">가장 먼저 떠오르는 생각을 적어주세요.</p>
+    <hr>
+    
+    <div id="survey-form">
+        <div class="question"><label>1. 요즘 내가 가장 많이 느끼는 감정은...</label><input type="text" id="q1" placeholder="이다."></div>
+        <div class="question"><label>2. 누군가 나를 무시한다고 느낄 때 나는...</label><input type="text" id="q2" placeholder="한다."></div>
+        <div class="question"><label>3. 갈등이 생기면 나는 보통...</label><input type="text" id="q3" placeholder="한다."></div>
+        <div class="question"><label>4. 내가 가장 피하고 싶은 상황은...</label><input type="text" id="q4" placeholder="이다."></div>
+        <div class="question"><label>5. 사람들과 함께 있을 때 나는...</label><input type="text" id="q5" placeholder="한 편이다."></div>
+        <div class="question"><label>6. 내 성격의 장점은...</label><input type="text" id="q6" placeholder="이다."></div>
+        <div class="question"><label>7. 내 성격의 단점은...</label><input type="text" id="q7" placeholder="이다."></div>
+        <div class="question"><label>8. 나를 힘들게 하는 사람은 보통...</label><input type="text" id="q8" placeholder="한 사람이다."></div>
+        <div class="question"><label>9. 화가 나도 나는 주로...</label><input type="text" id="q9" placeholder="한다."></div>
+        <div class="question"><label>10. 지금의 나는...</label><input type="text" id="q10" placeholder="한 상태라고 생각한다."></div>
+        
+        <button onclick="showResult()">검사 결과 확인하기</button>
     </div>
-    <script src="main.js"></script>
+
+    <div id="result">
+        <h3>📊 검사 결과 요약</h3>
+        <div id="result-content"></div>
+        <p style="font-size: 0.9em; color: #777; margin-top: 20px;">* 본 결과는 입력하신 내용을 바탕으로 합니다. 심층적인 상담은 전문가와 상의하세요.</p>
+        <button onclick="location.reload()" style="background-color: #999;">다시 작성하기</button>
+    </div>
+</div>
+
+<script>
+    function showResult() {
+        const questions = [
+            "가장 많이 느끼는 감정", "무시당할 때의 반응", "갈등 해결 방식", 
+            "피하고 싶은 상황", "대인관계 스타일", "성격의 장점", 
+            "성격의 단점", "힘들게 하는 타인 유형", "분노 조절 방식", "현재의 자아 상태"
+        ];
+        
+        let resultHtml = "";
+        for(let i=1; i<=10; i++) {
+            let answer = document.getElementById('q' + i).value;
+            if(!answer) answer = "(미입력)";
+            resultHtml += `<div class="result-item"><strong>${questions[i-1]}:</strong> ${answer}</div>`;
+        }
+        
+        document.getElementById('survey-form').style.display = 'none';
+        document.getElementById('result-content').innerHTML = resultHtml;
+        document.getElementById('result').style.display = 'block';
+    }
+</script>
+
 </body>
 </html>
