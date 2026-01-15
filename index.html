@@ -9,11 +9,13 @@
         h2 { color: #4a90e2; text-align: center; }
         .question { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background-color: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 20px; }
         button:hover { background-color: #357abd; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
         #result { margin-top: 30px; display: none; padding: 20px; background: #eef7ff; border-radius: 10px; }
         .result-item { margin-bottom: 10px; border-bottom: 1px dotted #ccc; padding-bottom: 5px; }
+        .api-key-section { background-color: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffeeba; }
     </style>
 </head>
 <body>
@@ -24,6 +26,12 @@
     <hr>
     
     <div id="survey-form">
+        <div class="api-key-section">
+            <label for="api-key">🔑 Google API Key (AI 분석용)</label>
+            <input type="password" id="api-key" placeholder="API Key를 입력하세요">
+            <small style="color: #666; display: block; margin-top: 5px;">* 키는 저장되지 않고 오직 분석 요청에만 사용됩니다.</small>
+        </div>
+
         <div class="question"><label>1. 요즘 내가 가장 많이 느끼는 감정은...</label><input type="text" id="q1" placeholder="이다."></div>
         <div class="question"><label>2. 누군가 나를 무시한다고 느낄 때 나는...</label><input type="text" id="q2" placeholder="한다."></div>
         <div class="question"><label>3. 갈등이 생기면 나는 보통...</label><input type="text" id="q3" placeholder="한다."></div>
@@ -35,7 +43,7 @@
         <div class="question"><label>9. 화가 나도 나는 주로...</label><input type="text" id="q9" placeholder="한다."></div>
         <div class="question"><label>10. 지금의 나는...</label><input type="text" id="q10" placeholder="한 상태라고 생각한다."></div>
         
-        <button onclick="showResult()">검사 결과 확인하기</button>
+        <button id="submit-btn" onclick="showResult()">AI 분석 결과 확인하기</button>
     </div>
 
     <div id="result">
@@ -43,7 +51,10 @@
         <div id="result-content"></div>
         
         <div id="analysis-section" style="margin-top: 25px; padding-top: 20px; border-top: 2px dashed #ccc;">
-            <h4 style="color: #4a90e2;">🧠 심리 상태 분석</h4>
+            <h4 style="color: #4a90e2;">🧠 심리 상태 분석 (AI)</h4>
+            <div id="loading-spinner" style="display: none; text-align: center; color: #666;">
+                <p>AI가 분석 중입니다... 잠시만 기다려주세요 🤖</p>
+            </div>
             <p id="psych-analysis" style="font-weight: bold; color: #555;"></p>
             
             <h4 style="color: #2ecc71; margin-top: 20px;">💡 맞춤형 솔루션</h4>
@@ -52,82 +63,89 @@
             </div>
         </div>
 
-        <p style="font-size: 0.9em; color: #777; margin-top: 20px;">* 본 결과는 입력하신 내용을 바탕으로 한 간단한 분석입니다. 심층적인 상담은 전문가와 상의하세요.</p>
+        <p style="font-size: 0.9em; color: #777; margin-top: 20px;">* 본 결과는 AI(Gemini) 분석 결과이며, 전문적인 의학적 진단이 아닙니다.</p>
         <button onclick="location.reload()" style="background-color: #999;">다시 작성하기</button>
     </div>
 </div>
 
 <script>
-    function showResult() {
+    async function showResult() {
+        const apiKey = document.getElementById('api-key').value;
+        if (!apiKey) {
+            alert('정확한 분석을 위해 Google API Key를 입력해주세요.');
+            return;
+        }
+
         const questions = [
             "가장 많이 느끼는 감정", "무시당할 때의 반응", "갈등 해결 방식", 
             "피하고 싶은 상황", "대인관계 스타일", "성격의 장점", 
             "성격의 단점", "힘들게 하는 타인 유형", "분노 조절 방식", "현재의 자아 상태"
         ];
         
+        let answersData = [];
         let resultHtml = "";
-        let allAnswers = "";
-
+        
         for(let i=1; i<=10; i++) {
             let answer = document.getElementById('q' + i).value;
             if(!answer) answer = "(미입력)";
-            else allAnswers += answer + " ";
             
+            answersData.push({ question: questions[i-1], answer: answer });
             resultHtml += `<div class="result-item"><strong>${questions[i-1]}:</strong> ${answer}</div>`;
         }
-        
-        // 아들러 심리학 기반 분석 로직 (Adlerian Lifestyle Analysis)
-        // 두 가지 축: 활동성(Activity Levels) & 사회적 관심(Social Interest)
-        const adlerKeywords = {
-            socialPositive: ['친구', '가족', '사랑', '함께', '도움', '배려', '이해', '대화', '우리', '사람', '감사', '약속', '신뢰', '좋다', '공감'],
-            socialNegative: ['싫다', '미움', '짜증', '무시', '혼자', '복수', '귀찮', '남', '적', '단절', '의심', '경쟁', '질투', '거절'],
-            energyActive: ['도전', '성공', '노력', '해결', '성취', '계획', '열정', '분노', '화', '싸움', '주장', '리드', '극복', '한다', '이기다'],
-            energyPassive: ['포기', '도망', '무섭다', '불안', '걱정', '눈치', '우울', '슬픔', '힘들다', '지친다', '못해', '숨다', '침묵', '어쩔', '모르겠다']
-        };
 
-        let socialScore = 0;
-        let energyScore = 0;
-        
-        // 답변 전체에서 키워드 카운팅
-        allAnswers.split(' ').forEach(word => {
-            if (adlerKeywords.socialPositive.some(k => word.includes(k))) socialScore++;
-            if (adlerKeywords.socialNegative.some(k => word.includes(k))) socialScore--;
-            if (adlerKeywords.energyActive.some(k => word.includes(k))) energyScore++;
-            if (adlerKeywords.energyPassive.some(k => word.includes(k))) energyScore--;
-        });
-
-        let type = "";
-        let analysisText = "";
-        let solutionText = "";
-
-        // 아들러의 생활양식 4가지 유형 판별
-        if (energyScore >= 0) {
-            if (socialScore >= 0) {
-                type = "사회적 유용형 (Socially Useful Type)";
-                analysisText = "당신은 아들러 심리학에서 말하는 가장 건강한 유형인 [사회적 유용형]에 가깝습니다. 높은 활동성과 사회적 관심을 바탕으로, 자신과 타인을 모두 긍정하며 직면한 인생의 과제들을 용기 있게 해결하려는 태도가 돋보입니다.";
-                solutionText = "지금처럼 '공동체 감각(Gemeinschaftsgefühl)'을 유지하며 주변에 긍정적인 영향력을 계속 발휘해 주세요. 당신의 건강한 에너지는 주변 사람들에게도 큰 힘이 됩니다. 가끔은 타인을 챙기느라 자신의 에너지가 고갈되지 않도록 '나를 위한 휴식'도 잊지 마세요.";
-            } else {
-                type = "지배형 (Ruling Type)";
-                analysisText = "에너지는 넘치지만 타인에 대한 사회적 관심이 다소 부족한 [지배형]의 성향이 보입니다. 자신의 뜻대로 상황을 통제하려 하거나, 타인과의 관계에서 우위를 점하려는 경향이 강할 수 있습니다. 적극적이지만 독단적일 수 있습니다.";
-                solutionText = "아들러는 '모든 고민은 인간관계에서 온다'고 했습니다. 이기려는 마음을 조금 내려놓고, 타인을 경쟁자가 아닌 '대등한 친구'로 바라보는 연습을 해보세요. 수평적인 관계 맺기가 당신의 삶을 더 풍요롭고 외롭지 않게 만들 것입니다.";
-            }
-        } else {
-            if (socialScore >= 0) {
-                type = "기생형/획득형 (Getting Type)";
-                analysisText = "타인에 대한 관심과 친화력은 있지만, 스스로 문제를 해결하려는 에너지가 다소 부족한 [기생형(획득형)] 성향이 보입니다. 다른 사람에게 의존하거나, 주위의 관심과 도움을 통해 안정을 얻으려는 마음이 클 수 있습니다.";
-                solutionText = "'과제의 분리'가 필요합니다. 타인의 기대나 도움에만 기대기보다, '내가 할 수 있는 일'부터 스스로 선택하고 책임지는 작은 성공 경험을 쌓아보세요. 당신 안에 잠든 '자립의 용기'를 깨운다면 훨씬 더 자유로워질 수 있습니다.";
-            } else {
-                type = "회피형 (Avoiding Type)";
-                analysisText = "현재 인생의 과제나 복잡한 대인관계에서 한 발 물러서고 싶어하는 [회피형] 성향이 나타납니다. 실패에 대한 두려움이 커서 아무것도 하지 않으려 하거나, 갈등 상황을 외면하고 마음의 문을 닫고 있을 수 있습니다.";
-                solutionText = "아들러는 이를 '용기의 부족'이라고 부릅니다. 완벽하지 않아도 괜찮습니다. 미움받을까 봐 두려워하지 마세요('미움받을 용기'). 아주 작은 목표부터 하나씩 시도해보는 것, 그리고 단 한 사람이라도 진솔한 대화를 나누는 것이 변화의 시작입니다.";
-            }
-        }
-        
+        // UI 전환 및 로딩 표시
         document.getElementById('survey-form').style.display = 'none';
         document.getElementById('result-content').innerHTML = resultHtml;
-        document.getElementById('psych-analysis').innerHTML = `<strong style='color:#333;'>${type}</strong><br><br>${analysisText}`;
-        document.getElementById('psych-solution').innerText = solutionText;
         document.getElementById('result').style.display = 'block';
+        document.getElementById('loading-spinner').style.display = 'block';
+        document.getElementById('psych-analysis').innerText = "";
+        document.getElementById('psych-solution').innerText = "";
+
+        // AI 프롬프트 구성
+        const prompt = `
+            당신은 전문 심리 상담가입니다. 사용자의 문장완성검사(SCT) 답변을 바탕으로 아들러 심리학(Adlerian Psychology) 관점에서 심리 상태를 분석해주세요.
+            
+            [사용자 답변]
+            ${answersData.map(a => `- ${a.question}: ${a.answer}`).join('\n')}
+
+            다음 형식의 JSON으로만 응답해주세요 (마크다운 없이 순수 JSON):
+            {
+                "type": "아들러의 생활양식 유형 (예: 사회적 유용형, 지배형, 기생형, 회피형 중 하나)",
+                "analysis": "답변을 종합적으로 분석한 심리 상태 설명 (3문장 내외)",
+                "solution": "아들러 심리학에 기반한 구체적인 조언과 격려 (3문장 내외)"
+            }
+        `;
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            if (!response.ok) throw new Error('API 호출 실패');
+
+            const data = await response.json();
+            const text = data.candidates[0].content.parts[0].text;
+            
+            // JSON 파싱 (마크다운 코드블럭이 있을 경우 제거)
+            const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            const result = JSON.parse(cleanText);
+
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('psych-analysis').innerHTML = `<strong style='color:#333; font-size: 1.2em;'>${result.type}</strong><br><br>${result.analysis}`;
+            document.getElementById('psych-solution').innerText = result.solution;
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('psych-analysis').innerText = "분석 중 오류가 발생했습니다. API Key를 확인하거나 잠시 후 다시 시도해주세요.";
+            document.getElementById('survey-form').style.display = 'block'; // 다시 시도할 수 있게 폼 표시
+            document.getElementById('result').style.display = 'none';
+            alert("AI 분석에 실패했습니다: " + error.message);
+        }
     }
 </script>
 
